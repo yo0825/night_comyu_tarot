@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12182d">
+  <meta name="description" content="今年のわたしへ、星のごほうび。1年の小さな頑張りを、星座とスイーツのカードに。">
+  <title>星のふりかえり手帖｜今年のわたしへ、星のごほうび。</title>
+  <link rel="preload" as="image" href="assets/sample_3.webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="app-shell" id="app">
+    <header class="header">
+      <button class="logo" id="homeButton" type="button" aria-label="はじめの画面に戻る"><span class="logo-icon">✧</span><span>星のふりかえり手帖</span></button>
+      <div class="header-right"><span class="event-chip">NOVEMBER 2026 <span aria-hidden="true">✦</span> NIGHT WORKSHOP</span><button id="resetButton" class="reset-link" type="button">入力を消去</button></div>
+    </header>
+
+    <main id="screenRoot">
+      <!-- The landing screen is a separate experience, not a long scroll form. -->
+      <section class="screen screen-home is-current" data-screen="0" aria-labelledby="homeTitle">
+        <div class="hero-copy">
+          <p class="overline"><span class="overline-rule"></span> A LITTLE GIFT FROM THE STARS</p>
+          <div class="micro-moon" aria-hidden="true">☾ <span>✦</span></div>
+          <h1 id="homeTitle">今年のわたしへ、<br><em>星のごほうび。</em></h1>
+          <p class="home-lead">がんばった日も、笑った日も。<br>そのひとつひとつが、あなたの星になる。</p>
+          <div class="cta-block"><button id="startButton" class="button button-primary button-large" type="button">あなただけのカードをつくる <span class="button-arrow">↗</span></button><span class="cta-hint">✧ 今年をふりかえって、未来の一歩を見つけよう</span></div>
+          <div class="landing-progress"><span class="progress-dot"></span><span>ふりかえり</span><span class="progress-line"></span><span>星を選ぶ</span><span class="progress-line"></span><span>カードを受け取る</span><span class="progress-line"></span><span>想いを届ける</span></div>
+        </div>
+        <div class="hero-stage" id="heroStage" aria-label="4種類の完成見本がゆっくり入れ替わります">
+          <div class="stage-orbit orbit-one" aria-hidden="true"></div><div class="stage-orbit orbit-two" aria-hidden="true"></div>
+          <div class="stage-moon" aria-hidden="true">☾</div>
+          <div class="stage-star star-a" aria-hidden="true">✦</div><div class="stage-star star-b" aria-hidden="true">✧</div><div class="stage-star star-c" aria-hidden="true">✧</div>
+          <div class="back-card left" aria-hidden="true"><img id="stackLeft" src="assets/sample_1.webp" alt=""></div>
+          <div class="back-card right" aria-hidden="true"><img id="stackRight" src="assets/sample_4.webp" alt=""></div>
+          <div class="hero-card" id="heroCard" aria-live="off"><img id="heroCardImage" src="assets/sample_3.webp" width="366" height="1005" alt="星風のマカロン。青い星空とスイーツのカード見本"></div>
+          <svg class="receiving-hands" viewBox="0 0 540 170" aria-hidden="true">
+            <defs><linearGradient id="handgold" x1="0" x2="1"><stop stop-color="#b89a90" stop-opacity=".1"/><stop offset=".5" stop-color="#ecd1b2" stop-opacity=".7"/><stop offset="1" stop-color="#b89a90" stop-opacity=".1"/></linearGradient></defs>
+            <path d="M24 136 C67 111 118 100 159 97 C192 95 214 91 232 80 C245 71 252 70 261 76 C272 85 257 99 236 111 C209 126 170 141 137 145 C101 151 60 155 18 162"/>
+            <path d="M522 136 C475 111 423 100 382 97 C351 95 326 91 308 80 C296 71 287 70 279 77 C269 86 283 99 305 111 C332 126 371 142 404 145 C442 150 486 155 531 162"/>
+            <path d="M170 123 C192 133 218 143 245 146 C266 148 282 148 302 145 C329 142 350 134 369 123"/>
+          </svg>
+          <div class="stage-caption"><span>✧</span> 星から、あなたの手元へ <span>✧</span></div>
+          <div class="slider-controls"><button type="button" id="prevCard" aria-label="前のカードを表示">‹</button><span class="slide-dots" id="heroDots" role="group" aria-label="カード見本の切り替え"></span><button type="button" id="nextCard" aria-label="次のカードを表示">›</button></div>
+        </div>
+        <div class="home-bottom"><span>✦</span> THE LITTLE STARS OF YOUR YEAR <span>✦</span></div>
+      </section>
+
+      <!-- The workshop has 4 distinct screens, each intentionally concise. -->
+      <section class="screen screen-work" data-screen="1" hidden aria-labelledby="reflectTitle">
+        <div class="step-bar"><span class="step-label">01 <span>/ 04</span></span><div class="step-track"><span style="--p:25%"></span></div><span class="step-kind">COLLECT YOUR STARS</span></div>
+        <div class="work-grid">
+          <div class="work-main">
+            <div class="section-head"><span class="ornament">✧</span><p class="overline">THE LIGHTS OF THIS YEAR</p><h2 id="reflectTitle">今年のきらめきを<br>集めよう。</h2><p class="under-heading">大きな出来事じゃなくていい。思い浮かぶことを、ひとつずつ。</p></div>
+            <div class="paper-form">
+              <div class="field"><label for="learning">✦ できたこと・学んだこと</label><textarea id="learning" rows="2" maxlength="240" placeholder="新しく覚えたこと、挑戦したこと…"></textarea><div class="suggestions"><button data-for="learning" data-text="新しいことに挑戦した" type="button">新しい挑戦</button><button data-for="learning" data-text="少しずつ学びを続けた" type="button">学びの継続</button></div></div>
+              <div class="field"><label for="connection">✦ 人とのつながり</label><textarea id="connection" rows="2" maxlength="240" placeholder="うれしい出会い、誰かと頑張ったこと…"></textarea><div class="suggestions"><button data-for="connection" data-text="新しい仲間と出会った" type="button">新しい出会い</button><button data-for="connection" data-text="誰かと支え合えた" type="button">支え合い</button></div></div>
+              <div class="field"><label for="happy">✦ うれしかったこと・好きだった時間</label><textarea id="happy" rows="2" maxlength="240" placeholder="ほっとした日、楽しかった瞬間…"></textarea></div>
+              <div class="field"><label for="effort">✦ 今年の自分に「おつかれさま」</label><textarea id="effort" rows="2" maxlength="240" placeholder="よく頑張ったな、と思うこと…"></textarea></div>
+            </div>
+            <div class="step-actions"><button class="button button-quiet" type="button" data-back="0">← 戻る</button><button class="button button-primary" type="button" data-next="2">次へ進む <span>→</span></button></div>
+          </div>
+          <aside class="work-aside"><span class="aside-kicker">星をひろう時間</span><div class="aside-card-wrap"><img src="assets/sample_1.webp" alt="月夜とカヌレのカード見本" loading="lazy"></div><p class="aside-caption">小さな「できた」を、<br>見逃さないで。</p><div class="constellation-deco" id="memoryStars" aria-hidden="true">✧　 ·　✦　 ·　✧</div></aside>
+        </div>
+      </section>
+
+      <section class="screen screen-work" data-screen="2" hidden aria-labelledby="futureTitle">
+        <div class="step-bar"><span class="step-label">02 <span>/ 04</span></span><div class="step-track"><span style="--p:50%"></span></div><span class="step-kind">ONE LITTLE WISH</span></div>
+        <div class="work-grid">
+          <div class="work-main">
+            <div class="section-head"><span class="ornament">☾</span><p class="overline">A PROMISE TO YOUR FUTURE SELF</p><h2 id="futureTitle">来年へ、<br>小さな願いを。</h2><p class="under-heading">できそうなことから、ひとつ。自分のペースで大丈夫。</p></div>
+            <div class="paper-form roomy">
+              <div class="field"><label for="values">✦ 来年も大切にしたいこと</label><textarea id="values" rows="4" maxlength="240" placeholder="もっと大切にしたい時間や、続けたいこと…"></textarea></div>
+              <div class="field"><label for="action">✦ 12月にはじめる、小さな一歩</label><textarea id="action" rows="4" maxlength="180" placeholder="例：週末に15分だけ、気になることを調べてみる"></textarea><div class="suggestions"><button data-for="action" data-text="週に15分、自分のための時間をつくる" type="button">15分だけ</button><button data-for="action" data-text="大切な人にありがとうを伝える" type="button">ありがとう</button><button data-for="action" data-text="気になることをひとつ調べる" type="button">小さく始める</button></div></div>
+            </div>
+            <div class="step-actions"><button class="button button-quiet" type="button" data-back="1">← 戻る</button><button class="button button-primary" type="button" data-next="3">カードのデザインへ <span>→</span></button></div>
+          </div>
+          <aside class="work-aside"><span class="aside-kicker">未来への手紙</span><div class="aside-card-wrap"><img src="assets/sample_4.webp" alt="森とモンブランのカード見本" loading="lazy"></div><p class="aside-caption">ひとつの小さな願いが、<br>次の星になる。</p></aside>
+        </div>
+      </section>
+
+      <section class="screen screen-work design-screen" data-screen="3" hidden aria-labelledby="designTitle">
+        <div class="step-bar"><span class="step-label">03 <span>/ 04</span></span><div class="step-track"><span style="--p:75%"></span></div><span class="step-kind">CHOOSE YOUR SKY</span></div>
+        <div class="work-grid design-grid">
+          <div class="work-main">
+            <div class="section-head compact"><span class="ornament">✦</span><p class="overline">YOUR ONE AND ONLY CARD</p><h2 id="designTitle">あなたの夜空を選ぼう。</h2><p class="under-heading">惹かれる色を選んで。星座とスイーツが、あなただけの1枚に。</p></div>
+            <fieldset class="choices"><legend>夜空の色</legend><div class="design-options">
+              <button type="button" class="look-option" data-look="moon" aria-pressed="false"><img src="assets/sample_1.webp" alt="" loading="lazy"><span>月光ラベンダー</span></button>
+              <button type="button" class="look-option" data-look="sun" aria-pressed="false"><img src="assets/sample_2.webp" alt="" loading="lazy"><span>やわらかな夕陽</span></button>
+              <button type="button" class="look-option" data-look="star" aria-pressed="true"><img src="assets/sample_3.webp" alt="" loading="lazy"><span>青い星空</span></button>
+              <button type="button" class="look-option" data-look="forest" aria-pressed="false"><img src="assets/sample_4.webp" alt="" loading="lazy"><span>静かな夜の森</span></button>
+            </div></fieldset>
+            <fieldset class="choices zodiac-choice"><legend>あなたの星座 <small>（おまかせでもOK）</small></legend><div class="zodiac-list" id="zodiacList"></div></fieldset>
+            <div class="select-pair"><div class="field"><label for="dessert">スイーツ</label><select id="dessert"><option value="auto">デザインにおまかせ</option><option>マカロン</option><option>カヌレ</option><option>いちごタルト</option><option>モンブラン</option><option>ティラミス</option><option>月餅</option><option>パステル・デ・ナタ</option></select></div><div class="field"><label for="starCount">星座をつくる星の数</label><select id="starCount"><option value="auto">おまかせ</option><option value="3">3つ</option><option value="5">5つ</option><option value="7">7つ</option><option value="9">9つ</option></select></div></div>
+            <div class="design-footnote">✧ 完成する画像は、縦長 <b>2:3</b> のタロットカード <b>1枚だけ</b>。見本の細長いカードとは比率が異なります。</div>
+            <div class="step-actions"><button class="button button-quiet" type="button" data-back="2">← 戻る</button><button class="button button-primary create-button" id="createButton" type="button">✧ ChatGPTでカードをつくる <span>↗</span></button></div>
+            <button type="button" class="small-action" id="copyPromptButton">生成プロンプトをコピーする</button>
+            <button type="button" class="small-action next-share" data-next="4">投稿文を先につくる →</button><p class="share-privacy">入力した内容はChatGPTへのURLに含まれます。個人情報・機密情報は入力しないでください。</p>
+          </div>
+          <aside class="work-aside selected-aside"><span class="aside-kicker">完成イメージ</span><div class="aside-card-wrap selected-card"><img id="selectedCard" src="assets/sample_3.webp" alt="青い星空のカード見本"></div><p class="aside-caption" id="selectedLabel">星風のマカロン</p><div class="mini-sky" aria-label="選んだ星の数と星座のイメージ"><svg id="miniConstellation" viewBox="0 0 180 70" aria-hidden="true"></svg><span id="miniZodiacLabel">✧ 星座のひかり</span></div><p class="aside-note">※ 見本画像。実際のカードはChatGPTで生成します。</p></aside>
+        </div>
+      </section>
+
+      <section class="screen screen-work share-screen" data-screen="4" hidden aria-labelledby="shareTitle">
+        <div class="step-bar"><span class="step-label">04 <span>/ 04</span></span><div class="step-track"><span style="--p:100%"></span></div><span class="step-kind">SHARE YOUR LITTLE LIGHT</span></div>
+        <div class="work-grid share-grid">
+          <div class="work-main">
+            <div class="section-head compact"><span class="ornament">✧</span><p class="overline">SEND YOUR WISH INTO THE SKY</p><h2 id="shareTitle">今年のわたしに、<br>おつかれさま。</h2><p class="under-heading">今年の頑張りと次の一歩を、あなたの言葉で残そう。</p></div>
+            <div class="paper-form composer">
+              <div class="composer-top"><span class="composer-star">✦</span><div><b>あなたの投稿</b><small>下の文章は自由に書き換えられます</small></div><span class="composer-mark">X POST</span></div>
+              <label class="sr-only" for="postText">X投稿の本文を編集する</label><textarea id="postText" rows="9" maxlength="280" placeholder="今年の自分に、伝えたいことを書いてみよう。"></textarea>
+              <div class="composer-meta"><span id="postCount">0 / 280</span><button class="small-text-button" id="regeneratePost" type="button">✧ 振り返りから文章をつくり直す</button></div>
+              <div class="post-image-row"><label class="upload-button" for="cardUpload">＋ 完成カードの画像を選ぶ</label><input type="file" accept="image/*" id="cardUpload"><span>画像はこの端末でのプレビューのみ。Xへはご自身で添付してください。</span></div>
+              <div class="composer-buttons"><button type="button" id="copyPostButton" class="button button-secondary">投稿文をコピー</button><button type="button" id="openXButton" class="button button-primary">Xで投稿画面を開く <span>↗</span></button></div>
+            </div>
+            <div class="step-actions"><button class="button button-quiet" type="button" data-back="3">← カードに戻る</button><button class="button button-quiet" type="button" id="saveMemoButton">ふりかえりを保存 ↓</button><button class="button button-quiet" type="button" data-next="0">最初へ戻る ✧</button></div>
+          </div>
+          <aside class="work-aside share-aside"><span class="aside-kicker">YOUR LITTLE STAR</span><div class="share-preview-frame"><img id="sharedCardImage" src="assets/sample_3.webp" alt="選んだデザインのカード見本"></div><div class="share-thankyou">✧<span>この一年を過ごしたあなたへ。<br>心から、おつかれさま。</span>✧</div><p class="aside-note">完成画像はChatGPTから保存して、投稿時に添付できます。</p></aside>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"><span>✧　星のふりかえり手帖</span><span>THE STARS OF YOUR YEAR WILL LIGHT THE WAY</span><span>2026 NIGHT WORKSHOP</span></footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog class="prompt-dialog" id="promptDialog"><div class="dialog-top"><strong>ChatGPTに渡す文章</strong><button id="dialogClose" aria-label="閉じる">×</button></div><p>自動入力されない場合は、この文章をコピーしてChatGPTに貼り付けてください。</p><textarea id="promptText" rows="14" readonly></textarea><div class="dialog-actions"><button class="button button-primary" type="button" id="dialogCopy">文章をコピー</button><button class="button button-secondary" type="button" id="dialogOpen">ChatGPTを開く ↗</button></div></dialog>
+</body>
+</html>
