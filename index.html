@@ -4,19 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#10192f">
-<meta name="description" content="今年の私に 星の贈りもの｜あなたの頑張りを星座とスイーツのタロットカードに">
+<meta name="description" content="一年の頑張りを 星とスイーツの大人なタロットカードに">
 <title>星の余韻｜一年の私に 星からの贈りもの</title>
 <link rel="preload" href="assets/card_canele.webp" as="image">
 <link rel="stylesheet" href="styles.css">
 <script src="app.js" defer></script>
 </head>
-<body>
-<div class="stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<body class="page-theme-0">
+<div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="shooting-sky" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="twinkle-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div class="prompt-flash" id="promptFlash" aria-hidden="true"><div class="prompt-flash-inner"><div class="flash-core"></div><p>星のことばを集めています</p></div></div>
 <div class="site">
   <header class="topbar">
-    <button type="button" class="brand" id="goHome" aria-label="ホームに戻る">
-      <span class="brand-orbit">✧</span><span>星の余韻<small>HOSHI NO YOIN</small></span>
-    </button>
+    <button type="button" class="brand" id="goHome" aria-label="ホームに戻る"><span class="brand-orbit">✧</span><span>星の余韻<small>HOSHI NO YOIN</small></span></button>
     <div class="top-actions"><span class="top-edition">2026 · NIGHT WORKSHOP</span><button type="button" id="clearAll" class="quiet-button">最初から</button></div>
   </header>
   <div class="progress" aria-label="制作のステップ">
@@ -29,19 +30,9 @@
       <div class="hero-copy">
         <p class="eyebrow">A LITTLE GIFT FROM THE STARS</p>
         <h1 id="mainTitle">今年の私に<br><em>星からの贈りもの</em></h1>
-        <p class="description">頑張ったことも 好きだった時間も<br>あなただけの物語を 星とスイーツのカードに</p>
+        <p class="description">頑張ったことも 好きだった時間も<br>大人っぽい一枚のカードに やさしく閉じ込めます</p>
         <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span aria-hidden="true">↗</span></button>
-        <div class="hero-facts"><span>✧ 入力は2つだけ</span><span>✧ デザインはAIにおまかせ</span></div>
-        <div class="sample-selector" aria-label="完成カード見本4種類">
-          <div class="sample-selector-heading"><span>✦ CARD GALLERY</span><span>4つの完成見本</span></div>
-          <div class="sample-thumbnails">
-            <button type="button" class="sample-choice is-selected" data-sample-card="0" aria-pressed="true"><img src="assets/card_canele.webp" alt="月のカヌレの見本" width="72" height="108"><span>月のカヌレ</span></button>
-            <button type="button" class="sample-choice" data-sample-card="1" aria-pressed="false"><img src="assets/card_strawberry.webp" alt="太陽のいちごタルトの見本" width="72" height="108"><span>いちごタルト</span></button>
-            <button type="button" class="sample-choice" data-sample-card="2" aria-pressed="false"><img src="assets/card_macaron.webp" alt="星風のマカロンの見本" width="72" height="108"><span>マカロン</span></button>
-            <button type="button" class="sample-choice" data-sample-card="3" aria-pressed="false"><img src="assets/card_montblanc.webp" alt="森のモンブランの見本" width="72" height="108"><span>モンブラン</span></button>
-          </div>
-          <p class="sample-tip">見本を選ぶと 右側のカードが切り替わります</p>
-        </div>
+        <div class="hero-facts"><span>✧ 入力は2つだけ</span><span>✧ デザインはAIにおまかせ</span><span>✧ 画像は1枚だけ生成</span></div>
       </div>
       <div class="hero-gallery" id="galleryRegion" aria-label="タロットカードの完成見本">
         <span class="halo" aria-hidden="true"></span><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
@@ -60,19 +51,19 @@
           <p class="section-description">思い出したことを そのまま書いてください<br>小さなことも 大切な歩みのひとつです</p>
           <div class="notebook">
             <div class="field"><div class="field-label"><label for="effort">今年頑張ったこと・できたこと</label><span>必須</span></div>
-              <textarea id="effort" maxlength="520" rows="5" placeholder="例：仕事とSHElikesの学びを両立して 初めてバナーを完成させた"></textarea>
+              <textarea id="effort" maxlength="520" rows="5" placeholder="例 仕事とSHElikesの学びを両立して 初めてバナーを完成させた"></textarea>
               <div class="field-meta"><div class="suggestions"><button data-field="effort" data-value="仕事と学びを両立した" type="button">仕事と学び</button><button data-field="effort" data-value="初めての作品づくりに挑戦した" type="button">はじめての挑戦</button><button data-field="effort" data-value="少しずつ学びを続けた" type="button">学びの継続</button></div><small id="effortCount">0 / 520</small></div>
             </div>
             <div class="field-separator">✧</div>
             <div class="field"><div class="field-label"><label for="joy">楽しかったこと・人とのつながり</label><span class="optional">任意</span></div>
-              <textarea id="joy" maxlength="350" rows="4" placeholder="例：コミュニティで仲間と励まし合えた 旅行先で素敵な景色に出会えた"></textarea>
+              <textarea id="joy" maxlength="350" rows="4" placeholder="例 コミュニティで仲間と励まし合えた 旅行先で素敵な景色に出会えた"></textarea>
               <div class="field-meta"><div class="suggestions"><button data-field="joy" data-value="新しい仲間と出会った" type="button">新しい出会い</button><button data-field="joy" data-value="好きなことに夢中になれた" type="button">好きな時間</button></div><small id="joyCount">0 / 350</small></div>
             </div>
           </div>
           <div class="bottom-navigation"><button class="text-button" type="button" data-goto="0">← 戻る</button><button class="button primary" type="button" id="goMake">カードに想いを込める <span>→</span></button></div>
           <p class="privacy-line">✧ 入力内容はこの端末のブラウザに保存されます</p>
         </div>
-        <aside class="right-feature reflection-aside"><div class="small-frame"><img src="assets/card_macaron.webp" alt="マカロンのカードの見本"></div><p>あなたが書いた言葉から<br>星座も スイーツも 未来の一歩も<br>AIがひとつのカードに整えます</p><div id="littleStars" class="little-stars" aria-label="書いた言葉に応じて星が灯る"><span>✦</span><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div></aside>
+        <aside class="right-feature reflection-aside"><div class="small-frame"><img src="assets/card_macaron.webp" alt="マカロンのカードの見本"></div><p>入力画面では 小さな星がきらめきます<br>落ち着いて思い出せるように やさしい空気感にしています</p><div id="littleStars" class="little-stars" aria-label="書いた言葉に応じて星が灯る"><span>✦</span><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div></aside>
       </div>
     </section>
 
@@ -80,17 +71,22 @@
       <div class="split-page make-layout">
         <div class="left-panel">
           <p class="eyebrow">02 · A CARD FOR YOU</p><h2 id="createTitle">あなたの物語を<br><em>一枚のカードへ</em></h2>
-          <p class="section-description">今年の振り返りから 3つの言葉をお届けします</p>
+          <p class="section-description">カードは 先ほどまでの大人っぽい雰囲気を保ちながら<br>下の3項目で必ず構成されるように整えます</p>
           <div class="promises">
             <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしい魅力</small></section></div>
             <div><span class="promise-symbol">✧</span><section><strong>今年頑張ったこと</strong><small>一歩ずつ重ねてきた努力や挑戦</small></section></div>
-            <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2027年の目標と 12月の小さな一歩</small></section></div>
+            <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2027年の方向性と 2026年12月の最初の一歩</small></section></div>
           </div>
-          <button type="button" id="openChatGPT" class="button primary wide">ChatGPTでカードを生成する <span>↗</span></button>
-          <details class="details"><summary>ChatGPTでうまく開けないとき</summary><div><button type="button" id="copyPrompt" class="button secondary small">生成プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を確認する</button><p>見本の構図をさらに近づけたい場合は 見本カードもChatGPTに添付できます</p><a id="downloadSample" href="assets/card_canele.webp" download="星の余韻_カード見本.webp">見本カードを保存する ↗</a></div></details>
+          <button type="button" id="buildPrompt" class="button primary wide">プロンプトを作成する <span>✦</span></button>
+          <div class="prompt-panel" id="promptPanel" hidden>
+            <div class="prompt-head"><strong>カード生成用のプロンプト</strong><small>明るい光の演出のあとに表示されます</small></div>
+            <textarea id="inlinePrompt" rows="11" readonly></textarea>
+            <div class="prompt-actions"><button type="button" id="openChatGPT" class="button primary">ChatGPTでカードを生成する <span>↗</span></button><button type="button" id="copyPrompt" class="button secondary">生成プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button dark">内容を大きく見る</button></div>
+          </div>
+          <details class="details"><summary>構図をより近づけたいとき</summary><div><p>このページの見本カードや 構図見本を一緒にChatGPTへ添付すると 近いレイアウトに寄せやすくなります</p><a id="downloadSample" href="assets/card_canele.webp" download="星の余韻_カード見本.webp">見本カードを保存する ↗</a><a id="downloadLayout" href="assets/layout_reference.png" download="カード構図見本.png">構図見本を保存する ↗</a></div></details>
           <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button><button class="button secondary" type="button" id="goShare">画像ができたら 次へ <span>→</span></button></div>
         </div>
-        <aside class="right-feature design-aside"><div class="design-overlap"><img src="assets/card_strawberry.webp" alt="いちごタルトの見本"><img src="assets/card_canele.webp" alt="カヌレの見本"></div><p>見本はあくまで一例です<br>カードの種類はAIが自動で選びます</p></aside>
+        <aside class="right-feature design-aside"><div class="design-overlap"><img src="assets/card_strawberry.webp" alt="いちごタルトの見本"><img src="assets/card_canele.webp" alt="カヌレの見本"></div><p>カードの出力イメージは 上部に夜空とスイーツの絵<br>下部に3項目の文章が並ぶ 上品なタロット形式です</p></aside>
       </div>
     </section>
 
