@@ -1,101 +1,343 @@
 (()=>{
   'use strict';
-  const $=id=>document.getElementById(id);
-  const STORAGE_KEY='hoshi-yoin-workshop-v8';
-  const SAMPLES=[
-    {file:'sample_1.webp',name:'月明かりとカヌレのカード'},
-    {file:'sample_2.webp',name:'夕陽といちごタルトのカード'},
-    {file:'sample_3.webp',name:'星空とマカロンのカード'},
-    {file:'sample_4.webp',name:'夜の森とモンブランのカード'}
+  const $ = id => document.getElementById(id);
+  const STORAGE_KEY = 'hoshi-rebuild-v10';
+  const cards = [
+    {src:'assets/original_card.webp', name:'つながりのデザイナー'},
+    {src:'assets/card_1.webp', name:'月のカヌレ'},
+    {src:'assets/card_2.webp', name:'太陽のいちごタルト'},
+    {src:'assets/card_3.webp', name:'星風のマカロン'},
+    {src:'assets/card_4.webp', name:'森のモンブラン'}
   ];
-  const sampleSrc=index=>'assets/'+SAMPLES[(index+SAMPLES.length)%SAMPLES.length].file;
-  let currentScreen=0;
-  let carouselIndex=2,carouselTimer=null,animationTimer=null,toastTimer=null;
-  let postEdited=false;
-  let uploadedImageUrl=null;
-  const getForm=()=>({reflection:$('reflection').value.trim(),connection:$('connection').value.trim()});
+  let view = 0, cardIndex = 0, timer = null, toastTimer = null;
+  let selectedFile = null, objectUrl = null, postTouched = false;
 
-  function notify(message){const el=$('toast');el.textContent=message;el.classList.add('is-visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('is-visible'),3500);}
-  function showScreen(index){
-    if(index===2&&!getForm().reflection){notify('今年の頑張りをひとつご記入ください。');index=1;}
-    currentScreen=Math.min(3,Math.max(0,index));
-    if(currentScreen===2)updateSummary();
-    if(currentScreen===3&&!postEdited)makePost(false);
-    document.querySelectorAll('[data-screen]').forEach(el=>{const isCurrent=Number(el.dataset.screen)===currentScreen;el.hidden=!isCurrent;el.classList.toggle('is-current',isCurrent)});
-    if(currentScreen===0)startCarousel();else stopCarousel();
-    if(currentScreen===3)updatePostCount();
-    window.scrollTo({top:0,behavior:'instant'});
+  const safe = s => (s || '').trim();
+  const getData = () => ({ reflection: safe($('reflection').value), connection: safe($('connection').value) });
+  const clip = (s, n) => [...s].length > n ? [...s].slice(0, n - 1).join('') + '…' : s;
+
+  function showToast(message){
+    const el = $('toast');
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
   }
-  function save(){try{const data={...getForm(),post:$('postText').value,postEdited};localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(error){/* storage may be disabled */}}
-  function restore(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(!saved)return;['reflection','connection'].forEach(id=>{if(typeof saved[id]==='string')$(id).value=saved[id]});if(typeof saved.post==='string')$('postText').value=saved.post;postEdited=!!saved.postEdited;}catch(error){}}
-  function clearAll(){if(!confirm('入力内容と保存された下書きを消去しますか？'))return;['reflection','connection','postText'].forEach(id=>$(id).value='');postEdited=false;if(uploadedImageUrl){URL.revokeObjectURL(uploadedImageUrl);uploadedImageUrl=null;}$('cardUpload').value='';$('sharedCardImage').src=sampleSrc(2);$('sharedImageNote').textContent='ここに、あなたのカードを飾れます。';try{localStorage.removeItem(STORAGE_KEY)}catch(e){}updateCounts();showScreen(0);notify('入力内容を消去しました。');}
-  function updateCounts(){for(const id of ['reflection','connection']){const el=$(id);$(id+'Count').textContent=`${el.value.length} / ${el.maxLength}`;}}
-  function updateSummary(){const d=getForm();const s=d.reflection.replace(/\s+/g,' ');$('summaryReflection').textContent=s.length>170?s.slice(0,169)+'…':s||'あなたの振り返りがここに表示されます。';}
-  function moveCarousel(){
-    $('heroImage').src=sampleSrc(carouselIndex);$('heroImage').alt=SAMPLES[carouselIndex].name+'の完成見本';
-    $('heroLeft').src=sampleSrc(carouselIndex+3);$('heroRight').src=sampleSrc(carouselIndex+1);
-    const el=$('heroCenter');el.classList.remove('is-resting','is-arriving');void el.offsetWidth;el.classList.add('is-arriving');
-    clearTimeout(animationTimer);animationTimer=setTimeout(()=>{el.classList.remove('is-arriving');el.classList.add('is-resting');},1120);
-    $('carouselDots').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',String(i===carouselIndex)));
+
+  function save(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...getData(), post: $('postText').value, postTouched })); }catch(_e){}
   }
-  function stopCarousel(){clearInterval(carouselTimer);carouselTimer=null;}
-  function startCarousel(){stopCarousel();if(document.hidden||window.matchMedia('(prefers-reduced-motion: reduce)').matches||currentScreen!==0)return;carouselTimer=setInterval(()=>{carouselIndex=(carouselIndex+1)%SAMPLES.length;moveCarousel();},5400);}
-  function initCarousel(){SAMPLES.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',s.name+'を表示');b.setAttribute('aria-current',String(carouselIndex===i));b.addEventListener('click',()=>{carouselIndex=i;moveCarousel();startCarousel()});$('carouselDots').appendChild(b)});$('prevCard').addEventListener('click',()=>{carouselIndex=(carouselIndex+SAMPLES.length-1)%SAMPLES.length;moveCarousel();startCarousel()});$('nextCard').addEventListener('click',()=>{carouselIndex=(carouselIndex+1)%SAMPLES.length;moveCarousel();startCarousel()});const stage=$('heroVisual');stage.addEventListener('mouseenter',stopCarousel);stage.addEventListener('mouseleave',startCarousel);stage.addEventListener('focusin',stopCarousel);stage.addEventListener('focusout',e=>{if(!stage.contains(e.relatedTarget))startCarousel()});document.addEventListener('visibilitychange',()=>document.hidden?stopCarousel():startCarousel());moveCarousel();}
-  function cardPrompt(){const d=getForm();return `【依頼】2026年1〜11月の振り返りから、星座×スイーツ×タロットの完成画像を必ず【1枚だけ】生成してください。解説文・複数案・コラージュ・カードを置いた写真は禁止。画像生成を実行し、画面全体を1枚のカードにしてください。
 
-【デザイン】20〜30代の働く女性が記念に持ち帰りたくなる、静かで上品な絵本調の水彩。夜空・月光・繊細な星座の結び線・アンティークゴールドの細い二重枠・アイボリーの紙。可愛さは控えめで洗練された大人の雰囲気。SHElikesでの学びやキャリアを考える人にも似合うが、本人の所属や仕事は推測しない。
-
-【自動で決める】振り返りの気持ちに合う星座風モチーフ、スイーツ1種類、夜空の色、短いカード名を選んでください。実際の誕生星座は断定しない。3〜9個程度の主星を細く結び、毎回異なる星座構図にする。2027年に無理なく試せる新しい挑戦を1つ考え、2026年12月に15〜30分でできる第一歩も添える。
-
-【レイアウト厳守】縦長2:3（約1080×1620）。カード1枚のみ。上下左右5%以上の安全余白。上15%：星座の記号、日本語タイトル12字以内、短い英語副題。中央47%：スイーツを主役にした美しいイラスト。下35%：明るいアイボリー地に3段の文章。最下部3%：小さな金色の星。文字切れなし、同じ左位置に整列。
-
-【下部の見出しを正確に表記】①「あなたはこんなタイプ」：文章から読み取れる長所を25〜35字。②「今年こんなことを頑張ってきたね」：本人の具体的な行動を25〜40字。③「これからのあなたへの小さなお告げ」：2027年の挑戦と12月の最初の一歩を40〜50字。各本文は2〜3行を目安に短く、読みやすい日本語で。文字化け、誤字、文の重複を避ける。
-
-【本人の言葉・創作根拠】
-頑張ったこと・できたこと：${d.reflection}
-楽しかったこと・つながり：${d.connection||'未記入'}
-
-入力されていない実績や性格、希望を決めつけない。押しつけず、具体的にねぎらう。最終出力は完成画像【1枚のみ】。`;}
-  function urlPrompt(){const d=getForm();return `この人の2026年1〜11月の振り返りをもとに、星座×スイーツ×タロットの【完成カード画像を1枚だけ】直接生成してください。文章での説明・複数画像・コラージュは禁止。
-【構図】縦長2:3。細い金の二重枠、安全余白5%。上15%：星座・日本語タイトル・英語副題。中央47%：スイーツ1種類の水彩イラストと月夜、星座の結び線。下35%：アイボリー地に金アイコン付き文章3段。下端3%：小さな星。日本語の文字は切らずに整列。
-【文章の見出し】「あなたはこんなタイプ」「今年こんなことを頑張ってきたね」「これからのあなたへの小さなお告げ」。本人の長所と具体的な努力をねぎらい、2027年に試す新しい挑戦1つと2026年12月の15〜30分の一歩を優しく提案。各本文は25〜45字程度。
-【画風】大人の女性が持ち帰りたくなる、静かで繊細な絵本調。星座・スイーツ・色は入力からAIが自動選択。本人の誕生星座や事実を推測しない。過剰なラメ・3D風は避ける。
-【振り返り】頑張り：${d.reflection}\n楽しかったこと・つながり：${d.connection||'未記入'}
-画像生成を実行し、単一カード画像1枚のみを出力。`;}
-  function openDialog(text,reason){$('promptText').value=text;$('dialogIntro').textContent=reason||'自動入力されない場合は、以下の文章をコピーしてChatGPTに貼り付けてください。';const dialog=$('promptDialog');if(!dialog.open)dialog.showModal();}
-  function checkInput(){if(getForm().reflection)return true;showScreen(1);$('reflection').classList.add('is-invalid');$('reflection').focus();notify('今年の頑張りを、ひとつご記入ください。');return false;}
-  function openChatGPT(){if(!checkInput())return;const short=urlPrompt();const url='https://chatgpt.com/?q='+encodeURIComponent(short);if(url.length>12000){openDialog(cardPrompt(),'文章が長くなったため、コピーしてChatGPTへ貼り付けてください。');return;}
-    // Run directly within the click handler, to avoid popup blockers.
-    const popup=window.open(url,'_blank');if(!popup){openDialog(cardPrompt(),'新しいタブが開きませんでした。文章をコピーしてChatGPTへ貼り付けてください。');notify('ポップアップがブロックされた可能性があります。');return;}
-    try{popup.opener=null}catch(e){}
-    showScreen(3);
-    notify('ChatGPTを開きました。内容を確認して、画像を生成してください。');
+  function restore(){
+    try{
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if(!data) return;
+      if(typeof data.reflection === 'string') $('reflection').value = data.reflection;
+      if(typeof data.connection === 'string') $('connection').value = data.connection;
+      if(typeof data.post === 'string') $('postText').value = data.post;
+      postTouched = Boolean(data.postTouched);
+    }catch(_e){}
   }
-  async function copyText(content){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(content);return true}const el=document.createElement('textarea');el.value=content;el.style.cssText='position:fixed;left:-10000px;top:0';document.body.append(el);el.focus();el.select();const ok=document.execCommand('copy');el.remove();return ok;}catch(e){return false;}}
-  function makePost(manual=false){const d=getForm();const concise=(d.reflection||'今年の私が続けてきたこと').replace(/\s+/g,' ').slice(0,63);let text=`この一年の自分へ、おつかれさま。✧\n\n${concise}\n\n小さな歩みも、大切にできた一年でした。\n2027年も私らしく、一歩ずつ。\n\n#夜活コミュニティ #SHElikes`;
-    if([...text].length>280)text=[...text].slice(0,280).join('');$('postText').value=text;postEdited=manual;updatePostCount();save();}
-  function updatePostCount(){$('postCount').textContent=`${[...$('postText').value].length} / 280`;}
-  function saveMemo(){const d=getForm();const text=`星の余韻｜2026年\n\n【今年頑張ったこと・できたこと】\n${d.reflection}\n\n【楽しかったこと・心に残ったつながり】\n${d.connection}\n\n【X投稿用メッセージ】\n${$('postText').value}\n\n※AIが提案した2027年の挑戦はChatGPTのカード画像に記載されています。`;const blob=new Blob(['\ufeff'+text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='星の余韻_2026年のふりかえり.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);notify('ふりかえりを保存しました。');}
-  function previewUpload(e){const file=e.target.files?.[0];if(!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>12*1024*1024){notify('PNG・JPEG・WebPで12MB以下の画像を選んでください。');e.target.value='';return;}if(uploadedImageUrl)URL.revokeObjectURL(uploadedImageUrl);uploadedImageUrl=URL.createObjectURL(file);$('sharedCardImage').src=uploadedImageUrl;$('sharedCardImage').alt='ご自身で生成された完成カード';$('sharedImageNote').textContent='完成カードをプレビューしています。';notify('カード画像を表示しました。Xへの画像添付は投稿画面で行ってください。');}
+
+  function updateCounts(){
+    $('reflectionCount').textContent = [...$('reflection').value].length;
+    $('connectionCount').textContent = [...$('connection').value].length;
+    const score = [
+      $('reflection').value.length > 0,
+      $('reflection').value.length >= 40,
+      $('reflection').value.length >= 90,
+      $('connection').value.length > 0,
+      $('connection').value.length >= 30
+    ].filter(Boolean).length;
+    [...$('starMeter').children].forEach((star, i) => star.classList.toggle('on', i < score));
+    const n = [...$('postText').value].length;
+    $('postCount').textContent = `${n} / 280`;
+  }
+
+  function setView(next){
+    next = Number(next);
+    if(next >= 2 && !getData().reflection){
+      showToast('まずは 今年頑張ったことを入力してください');
+      next = 1;
+    }
+    view = Math.max(0, Math.min(3, next));
+    document.querySelectorAll('[data-view]').forEach(section => {
+      const active = Number(section.dataset.view) === view;
+      section.hidden = !active;
+      section.classList.toggle('is-active', active);
+    });
+    document.querySelectorAll('[data-progress]').forEach((step, idx) => {
+      const stepNo = idx + 1;
+      step.classList.toggle('current', view === stepNo);
+      step.classList.toggle('done', view > stepNo);
+    });
+    if(view === 3 && !postTouched) buildPost(false);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if(view === 0) startSlider(); else stopSlider();
+  }
+
+  function renderCard(){
+    const card = cards[cardIndex];
+    $('heroCardImage').src = card.src;
+    $('heroCardImage').alt = `${card.name} のカード見本`;
+    $('cardDots').querySelectorAll('button').forEach((btn, i) => btn.setAttribute('aria-current', String(i === cardIndex)));
+  }
+
+  function startSlider(){
+    stopSlider();
+    if(document.hidden || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    timer = setInterval(() => {
+      cardIndex = (cardIndex + 1) % cards.length;
+      renderCard();
+    }, 6200);
+  }
+  function stopSlider(){ if(timer) clearInterval(timer); timer = null; }
+  function moveCard(delta){ cardIndex = (cardIndex + delta + cards.length) % cards.length; renderCard(); startSlider(); }
+  function initSlider(){
+    const dots = $('cardDots');
+    cards.forEach((card, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', card.name);
+      btn.setAttribute('aria-current', String(i === cardIndex));
+      btn.addEventListener('click', () => { cardIndex = i; renderCard(); startSlider(); });
+      dots.appendChild(btn);
+    });
+    $('prevCard').addEventListener('click', () => moveCard(-1));
+    $('nextCard').addEventListener('click', () => moveCard(1));
+    document.addEventListener('visibilitychange', () => document.hidden ? stopSlider() : (view === 0 && startSlider()));
+    $('heroStage').addEventListener('mouseenter', stopSlider);
+    $('heroStage').addEventListener('mouseleave', () => view === 0 && startSlider());
+    renderCard();
+    startSlider();
+  }
+
+  function buildPrompt(full = false){
+    const d = getData();
+    const base = `今年頑張ったこと：${d.reflection}
+楽しかったこと・人とのつながり：${d.connection || '未記入'}`;
+    if(!full){
+      return `【画像生成】次の振り返りから 星座×スイーツ×タロットカードを 1枚だけ直接生成して
+【カード仕様】縦長2:3 画像全体がカード 細いアンティークゴールド二重枠 安全余白5% 机の上の写真にはしない
+【レイアウト】上13%は星座記号 日本語タイトル 英語副題 中央50%はスイーツと夜空の水彩画 下34%はアイボリー地に3段の文章 最下部3%は小さな金装飾
+【固定見出し】①あなたのタイプ ②今年頑張ったこと ③来年のアクション
+【文のルール】見出し以外の日本語には句読点「、」「。」を使わない 2〜3行で読みやすく 本人の実績や性格を捏造しない 占いとして断定しない
+【内容】③には 2027年に合う挑戦1つと 2026年12月の最初の小さな行動を入れる
+【絵柄】最初の見本のような上品な水彩タロット 20〜30代の働く女性向け 紺 くすみラベンダー アイボリー 古金 花 月 星灯りを繊細に スイーツと星座は内容に合うものを選ぶ
+【本人の振り返り】
+${base}
+今すぐ1枚の画像を生成`;
+    }
+    return `【依頼】
+本人の2026年1〜11月の振り返りから 星座×スイーツ×タロットカードの完成画像を 1枚だけ生成してください
+
+【見た目】
+最初に作った見本カードの雰囲気に近い 繊細な水彩タロット
+・縦長2:3 画像全体がカード
+・細いアンティークゴールド二重枠 角丸は控えめ
+・上13%に星座記号 短い日本語タイトル 控えめな英語副題
+・中央50%にスイーツ1種類を主役にした月夜の美しい水彩画
+・下34%を明るいアイボリー地にし 3つの文章を読みやすく配置
+・最下部3%に小さな金の飾り
+
+【固定見出し】
+① あなたのタイプ
+② 今年頑張ったこと
+③ 来年のアクション
+
+【文字ルール】
+カード内の日本語本文には句読点「、」「。」を使わない
+各本文は 2〜3行
+見出しと本文は十分に読みやすい大きさ
+
+【内容ルール】
+①は本人の言葉から見える長所や雰囲気
+②は実際に頑張ったことをやさしくねぎらう
+③は 2027年の挑戦1つと 2026年12月の最初の15〜30分の小さな行動
+書かれていない成果や性格は創作しない
+
+【世界観】
+20〜30代の働く女性に似合う 上品で静かな大人可愛い世界観
+紺 くすみラベンダー アイボリー 古金を軸に 花 月 星 ランタンのやさしい灯り
+
+【本人の振り返り】
+${base}`;
+  }
+
+  function openPromptDialog(text){
+    $('promptField').value = text;
+    if(!$('promptDialog').open) $('promptDialog').showModal();
+  }
+
+  async function copyText(text){
+    try{
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-99999px';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        ta.remove();
+        if(!ok) throw new Error('copy failed');
+      }
+      return true;
+    } catch(_e){
+      openPromptDialog(text);
+      showToast('コピーできないため 文章を表示しました');
+      return false;
+    }
+  }
+
+  function openChat(){
+    if(!getData().reflection){ setView(1); return; }
+    const prompt = buildPrompt(false);
+    const url = 'https://chatgpt.com/?q=' + encodeURIComponent(prompt);
+    if(url.length > 10000){
+      openPromptDialog(buildPrompt(true));
+      showToast('文章が長いため コピーしてChatGPTへ貼り付けてください');
+      return;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+    showToast('ChatGPTを開きました 画像を保存したら次へ進んでください');
+  }
+
+  function buildPost(markTouched){
+    const d = getData();
+    const a = clip(d.reflection, 75);
+    const b = d.connection ? `
+うれしかったこと：${clip(d.connection, 50)}` : '';
+    $('postText').value = `今年のわたしに おつかれさま ✧
+
+今年頑張ったこと：${a}${b}
+
+来年も 自分のペースで一歩ずつ進みたい
+
+#夜活コミュニティ #SHElikes`;
+    postTouched = !!markTouched;
+    updateCounts();
+    save();
+  }
+
+  function currentPost(){ return $('postText').value.trim(); }
+
+  function openX(){
+    const text = currentPost();
+    if(!text){ showToast('投稿文を入力してください'); return; }
+    const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener,noreferrer');
+    showToast(selectedFile ? 'X上で画像を添付してください' : 'Xの投稿画面を開きました');
+  }
+
+  function updateShareButton(){
+    const button = $('nativeShareButton');
+    const can = Boolean(selectedFile && navigator.share && navigator.canShare && navigator.canShare({ files:[selectedFile] }));
+    button.hidden = !can;
+    $('shareHelp').textContent = can
+      ? 'この端末では 画像と文章を一緒に共有できます 共有先でXを選択してください'
+      : 'Xへは文章を自動で渡します 画像はアップロードした場合に一緒に共有できる端末があります';
+  }
+
+  async function nativeShare(){
+    if(!(selectedFile && navigator.share && navigator.canShare && navigator.canShare({ files:[selectedFile] }))){
+      showToast('この端末では 画像つき共有に対応していません');
+      return;
+    }
+    try{
+      await navigator.share({ files:[selectedFile], text: currentPost() });
+    } catch(err){
+      if(err.name !== 'AbortError') showToast('共有できませんでした');
+    }
+  }
+
+  function setImage(file){
+    if(!file) return;
+    if(!['image/png','image/jpeg','image/webp'].includes(file.type)) { showToast('PNG JPG WebP の画像を選んでください'); return; }
+    if(file.size > 16 * 1024 * 1024) { showToast('16MB以下の画像を選んでください'); return; }
+    if(objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(file);
+    selectedFile = file;
+    $('shareCardImage').src = objectUrl;
+    $('shareCardImage').alt = 'アップロードした完成カード';
+    $('uploadNote').textContent = `${file.name} を表示しています`;
+    $('previewTag').textContent = 'YOUR LITTLE STAR';
+    $('uploadBox').classList.add('has-user-image');
+    updateShareButton();
+    showToast('画像を読み込みました');
+  }
+
+  function downloadMemo(){
+    const d = getData();
+    const text = `星のふりかえりカード
+
+【今年頑張ったこと】
+${d.reflection}
+
+【楽しかったこと・人とのつながり】
+${d.connection}
+
+【投稿文】
+${currentPost()}
+`;
+    const blob = new Blob(['﻿' + text], { type:'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '星のふりかえりカード_メモ.txt';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 800);
+    showToast('メモを保存しました');
+  }
+
+  function reset(){
+    if(!confirm('入力内容と投稿文を消去しますか')) return;
+    $('reflection').value = ''; $('connection').value = ''; $('postText').value = '';
+    postTouched = false;
+    if(objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = null; selectedFile = null; $('imageUpload').value = '';
+    $('shareCardImage').src = 'assets/original_card.webp';
+    $('shareCardImage').alt = 'カード見本';
+    $('previewTag').textContent = '見本カード';
+    $('uploadNote').textContent = 'ChatGPTで保存したカード画像をアップロードすると ここに表示されます';
+    $('uploadBox').classList.remove('has-user-image');
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(_e){}
+    updateCounts(); updateShareButton(); setView(0); showToast('最初の状態に戻しました');
+  }
+
   function bind(){
-    $('homeButton').addEventListener('click',()=>showScreen(0));$('startButton').addEventListener('click',()=>showScreen(1));$('resetButton').addEventListener('click',clearAll);
-    $('reflectionForm').addEventListener('submit',e=>e.preventDefault());
-    document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>showScreen(Number(b.dataset.go))));
-    for(const id of ['reflection','connection'])$(id).addEventListener('input',()=>{$(id).classList.remove('is-invalid');updateCounts();save();});
-    document.querySelectorAll('[data-suggest]').forEach(b=>b.addEventListener('click',()=>{const field=$(b.closest('[data-for]').dataset.for),s=b.dataset.suggest;if(field.value.includes(s)){notify('すでに入力されています。');return;}const v=field.value.trim()?field.value.trim()+'／'+s:s;if(v.length>field.maxLength){notify('入力文字数の上限に達しています。');return;}field.value=v;field.classList.remove('is-invalid');updateCounts();save();field.focus();}));
-    $('reflectionNext').addEventListener('click',()=>{if(checkInput())showScreen(2)});
-    $('createButton').addEventListener('click',openChatGPT);
-    $('copyPromptButton').addEventListener('click',()=>{if(!checkInput())return;openDialog(cardPrompt(),'必要に応じて、文章をコピーしてChatGPTへ貼り付けてください。');});
-    $('postText').addEventListener('input',()=>{postEdited=true;updatePostCount();save();});
-    $('regeneratePost').addEventListener('click',()=>makePost(true));
-    $('copyPostButton').addEventListener('click',async()=>{const t=$('postText').value.trim();if(!t){notify('投稿文をご入力ください。');return;}if(await copyText(t))notify('投稿文をコピーしました。');else notify('コピーできませんでした。文章を選択してコピーしてください。');});
-    $('openXButton').addEventListener('click',()=>{const t=$('postText').value.trim();if(!t){notify('投稿文をご入力ください。');return;}const p=window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(t),'_blank');if(p)try{p.opener=null}catch(e){}else notify('新しいタブを開けませんでした。投稿文をコピーしてお使いください。');});
-    $('cardUpload').addEventListener('change',previewUpload);$('saveMemoButton').addEventListener('click',saveMemo);
-    $('dialogClose').addEventListener('click',()=>$('promptDialog').close());
-    $('dialogCopy').addEventListener('click',async()=>{const t=$('promptText').value;if(await copyText(t)){notify('プロンプトをコピーしました。');}else{$('promptText').focus();$('promptText').select();notify('コピーできませんでした。選択された文章を手動でコピーしてください。');}});
-    $('dialogOpen').addEventListener('click',()=>{const p=window.open('https://chatgpt.com/','_blank');if(p){try{p.opener=null}catch(e){}$('promptDialog').close();showScreen(3);notify('ChatGPTが開きました。プロンプトを貼り付けてください。');}else notify('新しいタブを開けませんでした。ブラウザの設定をご確認ください。');});
-    $('howItWorks').addEventListener('click',()=>$('infoDialog').showModal());$('infoClose').addEventListener('click',()=>$('infoDialog').close());$('infoDone').addEventListener('click',()=>$('infoDialog').close());
-    for(const id of ['promptDialog','infoDialog'])$(id).addEventListener('click',e=>{if(e.target===$(id))$(id).close();});
+    $('brandButton').addEventListener('click', () => setView(0));
+    $('startButton').addEventListener('click', () => setView(1));
+    $('resetButton').addEventListener('click', reset);
+    document.querySelectorAll('[data-goto]').forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.goto)));
+    ['reflection','connection'].forEach(id => $(id).addEventListener('input', () => { updateCounts(); if(!postTouched) buildPost(false); save(); }));
+    document.querySelectorAll('[data-append]').forEach(btn => btn.addEventListener('click', () => {
+      const target = $(btn.dataset.append); const text = btn.dataset.text;
+      if(target.value.includes(text)) { showToast('すでに追加されています'); return; }
+      const next = target.value.trim() ? target.value.trim() + "\n" + text : text;
+      if(next.length > target.maxLength) { showToast('入力の上限に達します'); return; }
+      target.value = next; target.dispatchEvent(new Event('input', { bubbles:true })); target.focus();
+    }));
+    $('toMakeButton').addEventListener('click', () => setView(2));
+    $('generateButton').addEventListener('click', openChat);
+    $('copyPromptButton').addEventListener('click', async() => { if(await copyText(buildPrompt(true))) showToast('プロンプトをコピーしました'); });
+    $('toShareButton').addEventListener('click', () => setView(3));
+    $('postText').addEventListener('input', () => { postTouched = true; updateCounts(); save(); });
+    $('makePostButton').addEventListener('click', () => { buildPost(true); showToast('投稿文を作り直しました'); });
+    $('copyPostButton').addEventListener('click', async() => { if(!currentPost()) { showToast('投稿文を入力してください'); return; } if(await copyText(currentPost())) showToast('投稿文をコピーしました'); });
+    $('openXButton').addEventListener('click', openX);
+    $('nativeShareButton').addEventListener('click', nativeShare);
+    $('imageUpload').addEventListener('change', e => setImage(e.target.files?.[0]));
+    $('downloadMemoButton').addEventListener('click', downloadMemo);
+    $('policyButton').addEventListener('click', () => $('policyDialog').showModal());
+    $('closePolicyDialog').addEventListener('click', () => $('policyDialog').close());
+    $('closePromptDialog').addEventListener('click', () => $('promptDialog').close());
+    $('dialogCopy').addEventListener('click', async() => { if(await copyText($('promptField').value)) { $('promptDialog').close(); showToast('文章をコピーしました'); } });
+    $('dialogOpenChat').addEventListener('click', () => { window.open('https://chatgpt.com/', '_blank', 'noopener,noreferrer'); $('promptDialog').close(); });
+    ['promptDialog','policyDialog'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) $(id).close(); }));
   }
-  restore();bind();initCarousel();updateCounts();showScreen(0);updatePostCount();
+
+  restore(); bind(); initSlider(); updateCounts(); updateShareButton(); setView(0);
 })();
