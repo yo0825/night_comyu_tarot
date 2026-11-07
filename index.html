@@ -60,10 +60,16 @@
               <div class="field-meta"><div class="suggestions"><button data-field="joy" data-value="新しい仲間と出会った" type="button">新しい出会い</button><button data-field="joy" data-value="好きなことに夢中になれた" type="button">好きな時間</button></div><small id="joyCount">0 / 350</small></div>
             </div>
           </div>
-          <div class="bottom-navigation"><button class="text-button" type="button" data-goto="0">← 戻る</button><button class="button primary" type="button" id="goMake">カードに想いを込める <span>→</span></button></div>
+          <div class="bottom-navigation reflection-navigation">
+            <button class="text-button" type="button" data-goto="0">← 戻る</button>
+            <div class="reflection-actions">
+              <button class="clear-input-button" id="clearReflection" type="button" aria-label="振り返りの入力をクリアする">入力をクリア</button>
+              <button class="button primary" type="button" id="goMake">カードに想いを込める <span>→</span></button>
+            </div>
+          </div>
           <p class="privacy-line">✧ 入力内容はこの端末のブラウザに保存されます</p>
         </div>
-        <aside class="right-feature reflection-aside"><div class="small-frame"><img src="assets/card_macaron.webp" alt="マカロンのカードの見本"></div><p>入力画面では 小さな星がきらめきます<br>落ち着いて思い出せるように やさしい空気感にしています</p><div id="littleStars" class="little-stars" aria-label="書いた言葉に応じて星が灯る"><span>✦</span><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div></aside>
+        <aside class="right-feature reflection-aside"><div class="small-frame"><img src="assets/card_macaron.webp" alt="マカロンのカードの見本"></div><p>どんな小さな一歩も<br>あなただけの物語を彩る星になります</p><div id="littleStars" class="little-stars" aria-label="書いた言葉に応じて星が灯る"><span>✦</span><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div></aside>
       </div>
     </section>
 
@@ -71,7 +77,7 @@
       <div class="split-page make-layout">
         <div class="left-panel">
           <p class="eyebrow">02 · A CARD FOR YOU</p><h2 id="createTitle">あなたの物語を<br><em>一枚のカードへ</em></h2>
-          <p class="section-description">カードは 先ほどまでの大人っぽい雰囲気を保ちながら<br>下の3項目で必ず構成されるように整えます</p>
+          <p class="section-description">あなたの言葉から 星とスイーツの物語を紡ぎ<br>3つのメッセージを一枚におさめます</p>
           <div class="promises">
             <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしい魅力</small></section></div>
             <div><span class="promise-symbol">✧</span><section><strong>今年頑張ったこと</strong><small>一歩ずつ重ねてきた努力や挑戦</small></section></div>
@@ -79,14 +85,14 @@
           </div>
           <button type="button" id="buildPrompt" class="button primary wide">プロンプトを作成する <span>✦</span></button>
           <div class="prompt-panel" id="promptPanel" hidden>
-            <div class="prompt-head"><strong>カード生成用のプロンプト</strong><small>明るい光の演出のあとに表示されます</small></div>
+            <div class="prompt-head"><strong>カード生成用のプロンプト</strong><small>あなたの振り返りに合わせて作成しました</small></div>
             <textarea id="inlinePrompt" rows="11" readonly></textarea>
             <div class="prompt-actions"><button type="button" id="openChatGPT" class="button primary">ChatGPTでカードを生成する <span>↗</span></button><button type="button" id="copyPrompt" class="button secondary">生成プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button dark">内容を大きく見る</button></div>
           </div>
           <details class="details"><summary>構図をより近づけたいとき</summary><div><p>このページの見本カードや 構図見本を一緒にChatGPTへ添付すると 近いレイアウトに寄せやすくなります</p><a id="downloadSample" href="assets/card_canele.webp" download="星の余韻_カード見本.webp">見本カードを保存する ↗</a><a id="downloadLayout" href="assets/layout_reference.png" download="カード構図見本.png">構図見本を保存する ↗</a></div></details>
           <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button><button class="button secondary" type="button" id="goShare">画像ができたら 次へ <span>→</span></button></div>
         </div>
-        <aside class="right-feature design-aside"><div class="design-overlap"><img src="assets/card_strawberry.webp" alt="いちごタルトの見本"><img src="assets/card_canele.webp" alt="カヌレの見本"></div><p>カードの出力イメージは 上部に夜空とスイーツの絵<br>下部に3項目の文章が並ぶ 上品なタロット形式です</p></aside>
+        <aside class="right-feature design-aside"><div class="design-overlap"><img src="assets/card_strawberry.webp" alt="いちごタルトの見本"><img src="assets/card_canele.webp" alt="カヌレの見本"></div><p>夜空とスイーツの絵は上部約1/3に<br>3つの言葉は余白を活かしてゆったりと</p></aside>
       </div>
     </section>
 

@@ -20,3 +20,11 @@ body.page-theme-0 .shooting-sky{opacity:1}body.page-theme-1 .twinkle-field{opaci
 @media(max-width:650px){.topbar{height:72px}.top-edition{display:none}.brand{font-size:16px}.brand-orbit{width:34px;height:34px}.progress{gap:7px}.progress div{font-size:10px;gap:4px}.progress i{width:14px}.hero-copy h1{font-size:clamp(33px,8vw,49px)}.eyebrow{font-size:10px}.description{font-size:12px;line-height:2.1}.hero-gallery{min-height:520px;margin-top:10px}.feature-card{width:242px;max-width:75%}.deck-back{width:230px}.orbit-one{width:320px;height:450px}.orbit-two{width:260px;height:485px}.halo{width:330px;height:330px}.card-controls{bottom:18px}.gallery-caption{bottom:-10px}.left-panel h2{font-size:33px}.notebook{padding:20px 18px}.field-label label{font-size:14px}.field-meta{justify-content:flex-end}.field-meta .suggestions{order:2;width:100%}.share-buttons .button,.prompt-actions .button{flex:1 1 100%}.upload-area{padding:21px}.footer{font-size:8px;letter-spacing:.1em}.top-actions{gap:8px}.prompt-panel{padding:16px}}
 @media(max-width:650px){.hero-gallery{min-height:432px;overflow:clip}.feature-card{width:210px}.deck-back{width:198px}.orbit-one{width:294px;height:400px}.orbit-two{width:247px;height:425px}.card-controls{bottom:10px}.gallery-caption{bottom:-5px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* v12: clear button in reflection input screen */
+.reflection-navigation{gap:16px}
+.reflection-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:13px}
+.clear-input-button{background:transparent;border:1px solid rgba(227,205,191,.4);border-radius:999px;padding:12px 17px;color:#ddd2d4;font:12px var(--sans);transition:background .2s,border-color .2s,color .2s;cursor:pointer}
+.clear-input-button:hover,.clear-input-button:focus-visible{background:rgba(250,228,208,.10);border-color:#e2c9a7;color:#fff4e8}
+.clear-input-button:focus-visible{outline:2px solid #eacaa3;outline-offset:3px}
+@media(max-width:650px){.reflection-navigation{align-items:stretch}.reflection-actions{width:100%;gap:10px}.reflection-actions .clear-input-button{flex:0 0 auto}.reflection-actions .button{flex:1 1 170px;font-size:12px;padding:13px 17px}}

@@ -57,37 +57,42 @@
     return `【画像生成】次の振り返りから 星座×スイーツ×タロットカードの完成画像を 1枚だけ直接生成してください
 
 【絶対条件】
-・画像全体がカードそのもの
-・縦長2:3
-・上部は夜空とスイーツの美しい絵
-・下部は明るいアイボリーの文章欄
-・大人っぽく上品で 静かな雰囲気
+・画像全体が1枚のカードそのもの（机に置いた写真や複数カードの比較図にしない）
+・縦長2:3 安全余白5% 細いアンティークゴールド二重枠 四隅は小さく丸める
+・見本のような紺色の星空・ラベンダー・古金・水彩紙の繊細で静かな大人可愛い雰囲気
+・画面内には本人1人分のカードだけを描く
 
-【カード構図】
-・細いアンティークゴールドの二重枠
-・最上部に星座記号 日本語タイトル 英語副題
-・上側約58%は 夜空 星座 月 灯り 花を背景にした繊細な水彩イラスト
-・主役のスイーツは中央に大きく一種類だけ
-・下側約42%はアイボリー地の整った文章欄
-・文章欄は3段に区切り 左に見出し 右に本文の読みやすい構成
+【レイアウト：上部は絵が約1/3、文章を主役に】
+カードの全高を100%として割合を厳守する
+・最上部8%：星座記号・短い日本語タイトル・控えめな英語副題
+・続く32%：星座の線 月 小さな花 灯りを背景に スイーツ1種類を大きく描く水彩画
+・続く57%：明るいアイボリーの紙面に3段のメッセージ
+・最下部3%：小さな金色の装飾
+・絵がカードの半分以上を占めない 文章欄を圧迫しない
+・3段はそれぞれ約19%の高さを確保して金の細線で区切る
+・文章欄は左38%に番号つき見出し 右57%に本文 中央を細い縦の金線で区切る
+・左見出しの位置と右本文の開始位置を3段で完全にそろえる
+・本文は各段2〜4行で読み切れる短い日本語にする
 
-【固定見出し】
+【見出し：以下の3つを一字一句変えずに入れる】
 ① あなたのタイプ
 ② 今年頑張ったこと
 ③ 来年のアクション
 
-【本文ルール】
-・見出し以外の本文には句読点「、」「。」を使わない
-・各項目は2〜4行程度
-・本人が書いた内容から自然に要約する
-・成果や性格を大げさに創作しすぎない
-・③では 2027年に向いていそうな挑戦を1つ と 2026年12月の最初の小さな行動を具体的に書く
+【文章ルール】
+・本文に句読点「、」「。」は一切使用しない
+・本人の振り返りに含まれない性格や成果を創作しない
+・①は本人の言葉から見える魅力を断定せず優しく表す
+・②は実際の頑張りや学び・つながりを具体的にねぎらう
+・③では2027年の小さな挑戦を1つ提案し 2026年12月に始める15〜30分の最初の行動を1つ明示する
+・未来を占いとして断定しない 気持ちに寄り添うあたたかな言葉にする
 
-【絵柄】
-・20〜30代の働く女性に似合う 大人可愛い水彩タロット
-・紺 ラベンダー アイボリー 古金を中心に上品にまとめる
-・AI感を減らし 絵本のようにやわらかく繊細に描く
-・全体は静かな夜のムード
+【視覚表現】
+・20〜30代の働く女性や SHElikesで学ぶ女性に似合う 洗練された水彩のタロットカード
+・紺 くすみラベンダー アイボリー アンティークゴールドを基調にする
+・発光や装飾は控えめで手描きの質感を大切にする
+・星座とスイーツは本人の言葉に合わせてAIが1つずつ選ぶ
+・文字の欠落 誤字 ぼやけ はみ出しを避ける 必ず読みやすい日本語で描画する
 
 【本人の振り返り】
 ${ref}
@@ -118,7 +123,7 @@ ${ref}
   }
 
   function openChat(){
-    if(!promptBuilt) promptBuilt=buildPrompt();
+    promptBuilt=buildPrompt();
     const url='https://chatgpt.com/?q='+encodeURIComponent(promptBuilt);
     if(url.length>12000){ $('promptText').value=promptBuilt; $('promptModal').showModal(); showToast('文章が長いため コピーして貼り付けてください'); return; }
     window.open(url,'_blank','noopener,noreferrer');
@@ -156,6 +161,23 @@ ${promptBuilt||buildPrompt()}
 【投稿文】
 ${$('postText').value}
 `; const blob=new Blob(['﻿'+text],{type:'text/plain;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='星の余韻_メモ.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),800); }
+  function clearReflection(){
+    const hasContent=Boolean($('effort').value.trim()||$('joy').value.trim());
+    if(!hasContent){ showToast('入力欄はすでに空です'); return; }
+    if(!confirm('入力した2項目をクリアしますか？\n作成済みのプロンプトと投稿文案も消去されます')) return;
+    $('effort').value='';
+    $('joy').value='';
+    $('postText').value='';
+    $('inlinePrompt').value='';
+    $('promptText').value='';
+    $('promptPanel').hidden=true;
+    promptBuilt='';
+    postTouched=false;
+    updateReflect();
+    save();
+    $('effort').focus();
+    showToast('入力内容をクリアしました');
+  }
   function resetAll(){ if(!confirm('入力内容を最初から消去しますか')) return; ['effort','joy','postText','inlinePrompt','promptText'].forEach(id=>$(id).value=''); postTouched=false; promptBuilt=''; $('promptPanel').hidden=true; if(photoURL) URL.revokeObjectURL(photoURL); photo=null; photoURL=null; $('uploadedBox').hidden=true; $('uploadPlaceholder').hidden=false; $('imageStatus').textContent='ChatGPTで保存した画像を選択してください'; $('imageFile').value=''; try{localStorage.removeItem(KEY)}catch(_e){} updateReflect(); updateShare(); setPage(0); showToast('最初の状態に戻しました'); }
 
   function bind(){
@@ -163,6 +185,7 @@ ${$('postText').value}
     document.querySelectorAll('[data-goto]').forEach(btn=>btn.addEventListener('click',()=>setPage(btn.dataset.goto)));
     ['effort','joy'].forEach(id=>$(id).addEventListener('input',()=>{updateReflect(); if(!postTouched) buildPost(false); save();}));
     document.querySelectorAll('.suggestions button').forEach(btn=>btn.addEventListener('click',()=>{ const field=$(btn.dataset.field), val=btn.dataset.value; const next=field.value.trim()?field.value.trim()+'\n'+val:val; if(chars(next)>Number(field.maxLength)){ showToast('入力の上限に達します'); return;} field.value=next; field.dispatchEvent(new Event('input',{bubbles:true})); field.focus(); }));
+    $('clearReflection').addEventListener('click',clearReflection);
     $('goMake').addEventListener('click',()=>setPage(2)); $('buildPrompt').addEventListener('click',revealPrompt); $('openChatGPT').addEventListener('click',openChat);
     $('copyPrompt').addEventListener('click',async()=>{ const txt=promptBuilt||buildPrompt(); if(await copy(txt)) showToast('プロンプトをコピーしました'); }); $('viewPrompt').addEventListener('click',()=>{ $('promptText').value=promptBuilt||buildPrompt(); $('promptModal').showModal(); }); $('goShare').addEventListener('click',()=>setPage(3));
     $('rebuildPost').addEventListener('click',()=>{ buildPost(true); showToast('投稿文を作り直しました');}); $('postText').addEventListener('input',()=>{ postTouched=true; updateReflect(); save(); }); $('copyPost').addEventListener('click',async()=>{ const txt=$('postText').value.trim(); if(!txt){showToast('投稿文を入力してください'); return;} if(await copy(txt)) showToast('投稿文をコピーしました'); }); $('postToX').addEventListener('click',openX); $('nativeShare').addEventListener('click',nativeShare);
@@ -172,5 +195,5 @@ ${$('postText').value}
     $('prevCard').addEventListener('click',()=>showCard(cardIndex-1)); $('nextCard').addEventListener('click',()=>showCard(cardIndex+1)); document.addEventListener('visibilitychange',()=>document.hidden?stopSlider():page===0&&startSlider()); $('galleryRegion').addEventListener('mouseenter',stopSlider); $('galleryRegion').addEventListener('mouseleave',()=>page===0&&startSlider());
   }
 
-  restore(); bind(); renderDots(); updateReflect(); updateShare(); buildPost(false); setPage(0); startSlider();
+  restore(); bind(); renderDots(); updateReflect(); updateShare(); if(!$('postText').value) buildPost(false); setPage(0);
 })();
