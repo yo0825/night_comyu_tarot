@@ -44,3 +44,46 @@ button,textarea,select,input{font:inherit}button{cursor:pointer}button:disabled{
 
 .mini-sky{width:min(100%,260px);padding:4px 18px 12px;display:flex;flex-direction:column;gap:3px;align-items:center;border:1px solid rgba(242,212,172,.16);border-radius:15px;background:radial-gradient(ellipse at 50% 10%,rgba(130,126,179,.22),transparent 76%)}.mini-sky svg{width:180px;max-width:100%;height:70px;overflow:visible}.mini-sky span{font:11px var(--serif);color:#ead1b6;letter-spacing:.07em}
 @media(max-width:780px){.design-screen .work-aside,.share-screen .work-aside{display:flex;position:static;padding:16px 0 26px}.design-screen .aside-card-wrap{width:152px;height:345px}.share-screen .share-preview-frame{width:155px;height:360px}}
+/* v5: keep the experience intimate and focused on two prompts. */
+.minimal-form{max-width:720px;margin-inline:auto;padding:clamp(20px,3vw,38px)!important}
+.minimal-form .field{margin-bottom:27px}
+.minimal-form .field label small{font-weight:400;font-size:11px;opacity:.72;margin-left:5px}
+.minimal-form textarea{min-height:132px;font-size:15px;line-height:1.95}
+.minimal-form .field:nth-of-type(2) textarea{min-height:104px}
+.soft-assurance{color:#867985;font-size:12px;line-height:1.9;text-align:center;margin:15px 0 0}
+.auto-card-message{text-align:center;padding:44px 26px 38px!important;display:flex;flex-direction:column;align-items:center;gap:15px}
+.gift-symbol{font:34px Georgia,serif;letter-spacing:.6em;color:#be9a70;margin-left:.6em;animation:tinyTwinkle 4s ease-in-out infinite}
+.gift-symbol span{font-size:23px}
+.gift-lead{font-family:var(--serif);font-size:clamp(16px,2vw,20px);line-height:2;color:#55475a;margin:6px 0 0}
+.gift-caption{font-size:12px;color:#8c8492;margin:0 0 10px}
+.auto-card-message .create-button{margin-top:12px;min-height:56px;min-width:min(100%,330px)}
+.auto-card-message .small-action{margin:0}
+.auto-design .selected-aside{animation:fadeInUp .6s both}
+@keyframes tinyTwinkle{0%,100%{opacity:.7;filter:drop-shadow(0 0 0 transparent)}50%{opacity:1;filter:drop-shadow(0 0 9px rgba(207,169,112,.5))}}
+@media(max-width:600px){.minimal-form{padding:19px!important}.minimal-form textarea{font-size:14px}.auto-card-message{padding:32px 20px!important}.gift-lead br{display:none}}
+
+/* v6 | 星の余韻 — quiet, refined editorial art direction */
+:root{--night:#111829;--night2:#1b2237;--night3:#0d1425;--peach:#e7c9bc;--gold:#dcc4a2;--gold2:#ba9b79;--paper:#f7f2ec;--paper2:#eee9e6;--ink:#393643;--text:#f3eee9;--sub:#bcc1cc;--muted:#a8aebf;--border:rgba(217,192,156,.16)}
+body{background:radial-gradient(ellipse 55% 65% at 81% 17%,rgba(103,93,133,.13),transparent 76%),linear-gradient(145deg,#11182b,#151d32 58%,#11192a)}
+.header{border-bottom-color:rgba(226,205,181,.11)}
+.logo{font-size:18px;letter-spacing:.20em;font-weight:400}.logo-icon{border-color:rgba(220,196,162,.32);color:#d9c4a6}
+.event-chip{color:#bcb5c0;letter-spacing:.20em}
+.hero-copy h1{font-size:clamp(35px,3.75vw,60px);letter-spacing:.085em;line-height:1.65;font-weight:400}
+.hero-copy h1 em{color:#e8cbbb;text-shadow:none}
+.home-lead{font-size:clamp(13px,1.16vw,16px);line-height:2.3;letter-spacing:.08em;color:#c9cbd5}
+.overline{letter-spacing:.29em;font-size:10px;color:#d1b89a}
+.micro-moon{opacity:.55;font-size:24px}
+.button{font-weight:500;letter-spacing:.055em;transition:transform .3s,box-shadow .3s,background .3s}
+.button-primary{background:linear-gradient(120deg,#ecddd0,#dbc0ad);color:#39313f;box-shadow:0 9px 34px rgba(198,169,148,.14)}
+.button-primary:hover{box-shadow:0 13px 35px rgba(198,169,148,.25)}
+.button-secondary{background:rgba(226,218,227,.07);border-color:rgba(231,213,199,.25);color:#f0e8e5}
+.hero-stage::before{opacity:.60}
+.stage-orbit{border-color:rgba(220,195,166,.11)}
+.hero-card{border:2px solid rgba(227,205,178,.82);border-radius:14px;box-shadow:0 23px 65px rgba(5,10,21,.55),0 0 22px rgba(231,205,169,.09)}
+.paper-form{border:1px solid rgba(213,191,173,.27);border-radius:17px;background:linear-gradient(135deg,rgba(249,245,241,.99),rgba(239,235,233,.98))}
+.paper-form:before{border-color:rgba(181,157,138,.13);border-radius:12px}
+.field label{font-weight:600;letter-spacing:.025em}
+.suggestions button{border-color:#e0d6d5;background:#f6f1ef;color:#7b7280;padding:5px 13px}
+.suggestions button:hover{background:#ede5e2}
+.gift-symbol{color:#b09a80}.gift-caption{color:#837c85}
+@media (prefers-reduced-motion: reduce){.stage-star,.hero-card.is-arriving,.hero-card.is-resting,.gift-symbol{animation:none!important}}
