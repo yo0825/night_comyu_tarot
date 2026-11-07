@@ -78,6 +78,7 @@
     loaded.src=card.src;
     $('galleryCaption').textContent=card.title+' · 作品見本';
     document.querySelectorAll('#cardDots button').forEach((button,i)=>button.setAttribute('aria-current',String(i===cardIndex)));
+    document.querySelectorAll('[data-sample-card]').forEach((button,i)=>{button.classList.toggle('is-selected',i===cardIndex);button.setAttribute('aria-pressed',String(i===cardIndex));});
     $('downloadSample').href=card.src;
   }
   function moveCard(step){showCard(cardIndex+step);startCarousel();}
@@ -86,6 +87,7 @@
       const btn=document.createElement('button');btn.type='button';btn.setAttribute('aria-label',c.title+'を表示');btn.setAttribute('aria-current',String(i===0));
       btn.addEventListener('click',()=>{showCard(i);startCarousel();});$('cardDots').appendChild(btn);
     });
+    document.querySelectorAll('[data-sample-card]').forEach(button=>button.addEventListener('click',()=>{showCard(Number(button.dataset.sampleCard));startCarousel();}));
     $('prevCard').addEventListener('click',()=>moveCard(-1));
     $('nextCard').addEventListener('click',()=>moveCard(1));
     $('galleryRegion').addEventListener('mouseenter',stopCarousel);

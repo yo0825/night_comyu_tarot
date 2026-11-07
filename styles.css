@@ -15,3 +15,16 @@ main{flex:1;display:flex;flex-direction:column}.page{display:none;animation:reve
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 @media(max-width:650px){.hero-gallery{min-height:432px;overflow:clip}.feature-card{width:210px}.deck-back{width:198px}.orbit-one{width:294px;height:400px}.orbit-two{width:247px;height:425px}.card-controls{bottom:10px}.gallery-caption{bottom:-5px}}
+
+/* vFinal+ : 4 sample cards visible immediately on the first screen */
+.sample-selector{margin-top:27px;max-width:520px;padding:17px 18px 12px;border:1px solid rgba(229,198,161,.19);border-radius:20px;background:rgba(255,255,255,.025)}
+.sample-selector-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#cbb7b8;margin-bottom:12px;font-size:11px}
+.sample-selector-heading>span:first-child{font:10px Georgia,serif;color:#eac99f;letter-spacing:.12em}
+.sample-thumbnails{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sample-choice{display:flex;flex-direction:column;align-items:center;gap:9px;min-width:0;padding:9px 5px 8px;background:rgba(255,255,255,.018);border:1px solid transparent;border-radius:12px;color:#e2d5cd;transition:transform .24s,border-color .24s,background .24s}
+.sample-choice:hover,.sample-choice.is-selected{background:rgba(229,193,153,.09);border-color:rgba(241,202,158,.38);transform:translateY(-2px)}
+.sample-choice img{width:min(100%,76px);aspect-ratio:2/3;object-fit:contain;border-radius:7px;filter:drop-shadow(0 5px 10px rgba(0,0,0,.24))}
+.sample-choice>span{font-size:10px;line-height:1.4;text-align:center;white-space:nowrap}
+.sample-tip{color:#929eb8;text-align:right;font-size:10px;margin:10px 0 0;line-height:1.5}
+@media(max-width:1020px){.sample-selector{margin:26px auto 0;max-width:540px}}
+@media(max-width:650px){.sample-selector{padding:12px 10px 10px;margin-top:20px}.sample-thumbnails{gap:5px}.sample-choice{padding:6px 2px;gap:6px}.sample-choice img{width:min(100%,63px)}.sample-choice>span{font-size:9px}.sample-tip{text-align:center;font-size:9px}}
