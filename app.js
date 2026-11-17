@@ -16,8 +16,6 @@
   const progress = [...document.querySelectorAll('[data-progress]')];
   const samples = [
     { key: 'parfait', title: 'ひとりでは見えなかった色' },
-    { key: 'sun', title: '言葉に灯るひかり' },
-    { key: 'canele', title: '余白に宿る月' },
     { key: 'montblanc', title: '森を渡る小さな音' },
     { key: 'pudding', title: '湖の向こうの道' }
   ];
