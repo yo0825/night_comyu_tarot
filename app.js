@@ -23,6 +23,8 @@
   let promptTimer;
   let promptBuilt = '';
   let clearEverything = false;
+  const openingLinks = new WeakSet();
+  const copiedLinks = new WeakMap();
 
   function showToast(message) {
     const toast = $('toast');
@@ -173,6 +175,8 @@ ${reflection}
 
   function invalidatePrompt() {
     cancelGlow();
+    copiedLinks.delete($('openChatGPT'));
+    copiedLinks.delete($('modalChat'));
     promptBuilt = '';
     $('inlinePrompt').value = '';
     $('promptText').value = '';
@@ -185,11 +189,6 @@ ${reflection}
     $('modalCopyStatus').textContent = '';
   }
 
-  function chatUrlFor(text) {
-    const url = 'https://chatgpt.com/?q=' + encodeURIComponent(text);
-    return url.length <= 12000 ? url : 'https://chatgpt.com/';
-  }
-
   function revealPrompt() {
     if (promptTimer !== undefined) return;
     const finish = () => {
@@ -197,9 +196,8 @@ ${reflection}
       promptBuilt = buildPrompt();
       $('inlinePrompt').value = promptBuilt;
       $('promptText').value = promptBuilt;
-      const chatUrl = chatUrlFor(promptBuilt);
-      $('openChatGPT').href = chatUrl;
-      $('modalChat').href = chatUrl;
+      $('openChatGPT').href = 'https://chatgpt.com/';
+      $('modalChat').href = 'https://chatgpt.com/';
       $('copyStatus').textContent = '';
       $('promptPanel').hidden = false;
       $('buildPrompt').setAttribute('aria-expanded', 'true');
@@ -232,7 +230,7 @@ ${reflection}
     const text = field.value;
     if (!text.trim()) {
       showToast('先にプロンプトを作成してください');
-      return;
+      return false;
     }
 
     const wasHidden = field.hidden;
@@ -247,7 +245,8 @@ ${reflection}
       }
     }
 
-    if (!copied && field.value === text) {
+    if (field.value !== text || sourcePage !== page) return false;
+    if (!copied) {
       selectPrompt(field);
       try {
         copied = document.execCommand('copy');
@@ -256,7 +255,7 @@ ${reflection}
       }
     }
 
-    if (field.value !== text || sourcePage !== page) return;
+    if (field.value !== text || sourcePage !== page) return false;
     const message = copied
       ? 'コピーしました。ChatGPTに貼り付けて送信してください。'
       : '自動コピーできませんでした。表示された文章を長押し、または Ctrl+C / ⌘C でコピーしてください。';
@@ -265,17 +264,47 @@ ${reflection}
     $('copyStatus').textContent = message;
     $('modalCopyStatus').textContent = message;
     showToast(message);
+    return copied;
   }
 
-  function openChatAndCopy(event, field) {
-    if (!field.value.trim()) {
-      event.preventDefault();
+  async function openChatAndCopy(event, field) {
+    const link = event.currentTarget;
+    const text = field.value;
+    // A second click can use native navigation if a popup was blocked.
+    if (copiedLinks.get(link) === text && text.trim()) {
+      copiedLinks.delete(link);
+      return;
+    }
+    event.preventDefault();
+    if (!text.trim()) {
       showToast('先にプロンプトを作成してください');
       return;
     }
-    event.currentTarget.href = chatUrlFor(field.value);
-    // Keep the anchor's native new-tab navigation and start copying on this click.
-    void copyPrompt(field);
+    if (openingLinks.has(link)) return;
+    openingLinks.add(link);
+    link.setAttribute('aria-busy', 'true');
+    const copied = await copyPrompt(field);
+    openingLinks.delete(link);
+    link.removeAttribute('aria-busy');
+    if (!copied || field.value !== text) return;
+
+    // Do not move focus to another tab until clipboard writing has finished.
+    let chatWindow;
+    try {
+      chatWindow = window.open('about:blank', '_blank');
+      if (chatWindow) {
+        chatWindow.opener = null;
+        chatWindow.location.replace('https://chatgpt.com/');
+        return;
+      }
+    } catch {
+      if (chatWindow) chatWindow.close();
+    }
+    copiedLinks.set(link, text);
+    const message = 'コピーしました。もう一度「ChatGPTを開く」を押して、貼り付けてください。';
+    $('copyStatus').textContent = message;
+    $('modalCopyStatus').textContent = message;
+    showToast(message);
   }
 
   function openClear(all) {

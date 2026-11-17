@@ -8,7 +8,7 @@
 <title>星の余韻｜一年の私に 星からの贈りもの</title>
 <link rel="preload" href="assets/sample-canele.webp" as="image">
 <link rel="stylesheet" href="styles.css?v=zodiac-final">
-<script src="app.js?v=zodiac-final" defer></script>
+<script src="app.js?v=copy-before-open-20261118" defer></script>
 </head>
 <body class="page-theme-0">
 <div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -75,7 +75,7 @@
           <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
           <div class="prompt-panel" id="promptPanel" hidden>
             <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">準備ができました</h3></div>
-            <p class="prompt-help">別タブのChatGPTへプロンプトを渡します。文章が送られていない場合は、コピーしたプロンプトを貼り付けて送信してね。</p>
+            <p class="prompt-help">プロンプトをコピーしてから、別タブでChatGPTを開きます。開いた画面に貼り付けて送信してね。</p>
             <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を確認</button></div>
             <p id="copyStatus" role="status" aria-live="polite"></p>
             <div class="finish-guide"><strong>カードができたら</strong><ol><li>ChatGPTで生成した画像を保存してね。</li><li>ワークシートに戻って、保存した画像を貼り付けよう。</li></ol></div>
@@ -92,7 +92,7 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly spellcheck="false"></textarea><div class="modal-actions"><p id="modalCopyStatus" role="status"></p><button id="modalCopy" class="button primary" type="button">文章をコピー</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
-<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。「入力をクリア」で消去できます。「ChatGPTを開く」を押すと、作成したプロンプトをURLでChatGPTへ渡し、コピーも行います。開いたChatGPTでプロンプトが送信される場合があります。</p></dialog>
+<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。「入力をクリア」で消去できます。「ChatGPTを開く」を押すと、プロンプトのコピーが完了してからChatGPTを開きます。開いた画面に貼り付けて送信してください。自動コピーできない場合は、この画面に文章を表示してご案内します。</p></dialog>
 <dialog class="modal small-modal" id="clearModal" aria-labelledby="clearTitle" aria-describedby="clearDescription">
   <form method="dialog">
     <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3></div>
