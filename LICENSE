@@ -1,103 +1,201 @@
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10192f">
-<meta name="description" content="一年の頑張りを 星とスイーツの大人なタロットカードに">
-<title>星の余韻｜一年の私に 星からの贈りもの</title>
-<link rel="preload" href="assets/sample-parfait.webp" as="image">
-<link rel="stylesheet" href="styles.css?v=worksheet6">
-<script src="app.js?v=worksheet6" defer></script>
-</head>
-<body class="page-theme-0">
-<div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-<div class="shooting-sky" aria-hidden="true"><span></span><span></span><span></span></div>
-<div class="twinkle-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-<div class="prompt-flash" id="promptFlash" aria-hidden="true" hidden><div class="prompt-flash-inner"><div class="flash-core"></div><p>星のことばを集めています</p></div></div>
-<div class="site">
-  <header class="topbar">
-    <button type="button" class="brand" id="goHome" aria-label="ホームに戻る"><span class="brand-orbit">✧</span><span>星の余韻<small>HOSHI NO YOIN</small></span></button>
-    <div class="top-actions"><span class="top-edition">2026 · NIGHT WORKSHOP</span><button type="button" id="clearAll" class="quiet-button">最初から</button></div>
-  </header>
-  <div class="progress" aria-label="制作のステップ">
-    <div data-progress="1"><b>01</b><span>ふりかえる</span></div><i></i>
-    <div data-progress="2"><b>02</b><span>カードをつくる</span></div>
-  </div>
-  <main>
-    <section class="page hero-page active" data-page="0" aria-labelledby="mainTitle">
-      <div class="hero-copy">
-        <p class="eyebrow">A LITTLE GIFT FROM THE STARS</p>
-        <h1 id="mainTitle" tabindex="-1">今年の私に<br><em>星からの贈りもの</em></h1>
-        <p class="description">今年の出会いや小さな一歩を<br>あなただけのカードにしよう</p>
-        <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span class="external-arrow" aria-hidden="true"></span></button>
-      </div>
-      <div class="hero-gallery" id="galleryRegion" aria-label="タロットカードの完成見本">
-        <span class="halo" aria-hidden="true"></span><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
-        <span class="deck-back back-a" aria-hidden="true"></span><span class="deck-back back-b" aria-hidden="true"></span>
-        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" width="960" height="1440"></figure>
-        <div class="card-controls"><button type="button" id="prevCard" aria-label="前の見本">‹</button><span class="dots" id="cardDots"></span><button type="button" id="nextCard" aria-label="次の見本">›</button></div>
-      </div>
-    </section>
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
 
-    <section class="page" data-page="1" hidden aria-labelledby="reflectTitle">
-      <div class="split-page">
-        <div class="left-panel">
-          <h2 id="reflectTitle" tabindex="-1">ワークシートを<br><em>ふりかえる</em></h2>
-          <p class="section-description">ワークシートに書いた内容をコピーして、同じ名前の欄に貼り付けてね。</p>
-          <div class="notebook worksheet-fields">
-            <div><label for="connection">① つながり</label><textarea id="connection" rows="3" placeholder="例：勉強会で知り合った仲間と、作ったものを見せ合った"></textarea></div>
-            <div><label for="joy">② 喜び</label><textarea id="joy" rows="3" placeholder="例：週末に好きなカフェでゆっくり本を読んだ"></textarea></div>
-            <div><label for="challenge">③ 挑戦</label><textarea id="challenge" rows="3" placeholder="例：初めてイベントのバナーを作った"></textarea></div>
-            <div><label for="growth">④ 成長</label><textarea id="growth" rows="3" placeholder="例：作ったものの工夫を、自分の言葉で伝えられるようになった"></textarea></div>
-            <p id="effortError" class="field-error" role="alert" hidden>どれか1つの欄に内容を貼り付けてね。</p>
-          </div>
-          <div id="littleStars" class="little-stars" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
-          <div class="bottom-navigation">
-            <button type="button" class="text-button" data-goto="0">← トップへ戻る</button>
-            <button type="button" class="text-button" id="clearReflection">入力をクリア</button>
-            <button type="button" class="button primary" id="goMake">カード作成へ進む →</button>
-          </div>
-        </div>
-      </div>
-    </section>
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
-    <section class="page" data-page="2" hidden aria-labelledby="createTitle">
-      <div class="split-page make-layout">
-        <div class="left-panel">
-          <p class="eyebrow">02 · A CARD FOR YOU</p><h2 id="createTitle" tabindex="-1">あなたの物語を<br><em>一枚のカードへ</em></h2>
-          <p class="section-description">あなたの言葉から 星とスイーツの物語を紡ぎ<br>3つのメッセージを一枚におさめます</p>
-          <div class="promises">
-            <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしい魅力</small></section></div>
-            <div><span class="promise-symbol">✧</span><section><strong>今年頑張ったこと</strong><small>一歩ずつ重ねてきた努力や挑戦</small></section></div>
-            <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2026年12月の最初の一歩 → 2027年の目標</small></section></div>
-          </div>
-          <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
-          <div class="prompt-panel" id="promptPanel" hidden>
-            <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">カード生成用のプロンプト</h3></div>
-            <p class="prompt-help">ChatGPTを開いたら、入力欄のプロンプトを確認して送信してください。文章が入らない場合は「プロンプトをコピー」から貼り付けてください。</p>
-            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">プロンプト付きでChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を確認</button></div>
-            <p id="copyStatus" role="status" aria-live="polite"></p>
-            <div class="finish-guide"><strong>カードができたら</strong><ol><li>ChatGPTで生成した画像を保存してね。</li><li>ワークシートに戻って、保存した画像を貼り付けよう。</li></ol></div>
-            <textarea hidden id="inlinePrompt" aria-labelledby="promptTitle" rows="7" readonly></textarea>
-          </div>
-          <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button></div>
-        </div>
-        <aside class="right-feature design-aside"><div class="design-overlap"><img id="secondaryDesignImage" src="assets/sample-montblanc.webp" alt="" loading="lazy" width="960" height="1440"><img id="designImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" loading="lazy" width="960" height="1440"></div></aside>
-      </div>
-    </section>
+   1. Definitions.
 
-  </main>
-  <footer class="footer"><span>✧ A LITTLE STAR FOR YOU ✧</span><button type="button" id="openPrivacy" class="text-button">プライバシーについて</button></footer>
-</div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly></textarea><div class="modal-actions"><button id="modalCopy" class="button primary" type="button">文章をコピー</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
-<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。ChatGPTには、ご自身でプロンプトを貼り付けて送信します。</p></dialog>
-<dialog class="modal small-modal" id="clearModal" aria-labelledby="clearTitle" aria-describedby="clearDescription">
-  <form method="dialog">
-    <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3></div>
-    <p id="clearDescription"></p>
-    <div class="modal-actions"><button type="submit" value="cancel" class="button secondary" autofocus>キャンセル</button><button value="confirm" class="button primary" id="confirmClear" type="submit">クリアする</button></div>
-  </form>
-</dialog>
-</body></html>
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+   APPENDIX: How to apply the Apache License to your work.
+
+      To apply the Apache License to your work, attach the following
+      boilerplate notice, with the fields enclosed by brackets "[]"
+      replaced with your own identifying information. (Don't include
+      the brackets!)  The text should be enclosed in the appropriate
+      comment syntax for the file format. We also recommend that a
+      file or class name and description of purpose be included on the
+      same "printed page" as the copyright notice for easier
+      identification within third-party archives.
+
+   Copyright [yyyy] [name of copyright owner]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
