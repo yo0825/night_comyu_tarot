@@ -202,3 +202,44 @@ body {
 .finish-guide ol { padding-left: 1.5em; line-height: 1.8; }
 .external-arrow::before { content: "↗\FE0E"; font-family: Arial, sans-serif; }
 @media (max-width: 580px) { .worksheet-fields { grid-template-columns: 1fr; } }
+
+/* Keep controls and form columns inside their available width. */
+.split-page > *, .hero-page > *, .worksheet-fields > * {
+  min-width: 0;
+}
+.prompt-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 10px;
+}
+.prompt-actions .button {
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  line-height: 1.6;
+  padding: 12px 18px;
+}
+.prompt-actions .text-button {
+  justify-self: start;
+}
+#copyStatus {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.8;
+}
+#copyStatus:empty { display: none; }
+.worksheet-fields textarea { min-width: 0; }
+.external-arrow {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+}
+@media (max-width: 650px) {
+  .bottom-navigation { align-items: stretch; }
+  .bottom-navigation .button { width: 100%; }
+  .progress div { white-space: nowrap; }
+}
