@@ -4,20 +4,13 @@
   const $ = id => document.getElementById(id);
   const storageKey = 'hoshi-no-yoin-requested-v11';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const cards = [
-    { key: 'canele', title: '月のカヌレ', sweet: 'カヌレ', scene: '月明かりが差す菫色の書斎と古い本' },
-    { key: 'strawberry', title: '太陽のいちごタルト', sweet: 'いちごタルト', scene: '金色の灯りがともる夜の花園と薄紫の雲' },
-    { key: 'macaron', title: '星風のマカロン', sweet: 'マカロン', scene: '星が広がるラベンダー色の雲とティーセット' },
-    { key: 'montblanc', title: '森のモンブラン', sweet: 'モンブラン', scene: '深い青緑の森と琥珀色のランタン' },
-    { key: 'gateau', title: '真夜中のガトーショコラ', sweet: 'ガトーショコラ', scene: '真夜中の温室と紫の木の葉' },
-    { key: 'pudding', title: '湖畔のカラメルプリン', sweet: 'カラメルプリン', scene: '三日月を映す湖と藤の咲く茶室' }
-  ];
   const pages = [...document.querySelectorAll('[data-page]')];
   const progress = [...document.querySelectorAll('[data-progress]')];
   const samples = [
-    { key: 'parfait', title: 'ひとりでは見えなかった色' },
-    { key: 'montblanc', title: '森を渡る小さな音' },
-    { key: 'pudding', title: '湖の向こうの道' }
+    { key: 'canele', title: '月のカヌレ' },
+    { key: 'tart', title: '太陽のいちごタルト' },
+    { key: 'macaron', title: '星風のマカロン' },
+    { key: 'montblanc', title: '森のモンブラン' }
   ];
   const artwork = card => 'assets/sample-' + card.key + '.webp';
   const fields = [['connection', 'つながり'], ['joy', '喜び'], ['challenge', '挑戦'], ['growth', '成長']];
@@ -135,16 +128,18 @@
 ・縦長2:3 画像全体が1枚のカード 安全余白5%
 ・細いアンティークゴールドの二重枠 四隅は小さく丸める
 ・古金とアイボリーを共通にした 繊細な手描き水彩と水彩紙
-・本人の言葉に合う星座モチーフを1つ選ぶ
-・星座とスイーツを1つずつ選ぶ。候補はパフェ カヌレ タルト マカロン プリン モンブランなど。スイーツ本体は横幅の約60〜65%を目安に手前に描く
+・振り返りに合う星座を十二星座から1つ選ぶ。実際の誕生星座とは断定しない
+・星座とスイーツを1つずつ選ぶ。スイーツの例はカヌレ いちごタルト マカロン モンブラン。スイーツ本体は横幅の約60〜65%を目安に手前に描く
 ・四隅に古金の植物装飾 区切り線に小さな菱形 最下部に月と小枝の飾りを添える。絵には場面に合う花や灯りを使う。文章の周りには十分な余白を残す
-・添付見本があれば構図と画風の参考にする
+・上部には選んだ星座の記号をはっきり描き 日本語の星座名と小さな英語名を添える。選んだ星座の実際の星の配置と主な結び方に沿った星座線 月と星のきらめきで星座タロットらしさを表す
+・紙の粒子と絵具のにじみが見える繊細な水彩で描く。スイーツの背景に夜空や月 小さなランタン 花などを調和させる
+・添付見本があれば枠 水彩の質感 文章欄の配置を参考にする。スイーツや配色まで固定しない
 
 ・色と光と背景は振り返りに合わせて選ぶ。菫色の月夜 暖かなアプリコットの花園 群青の星空 深緑と琥珀の森などから変化をつける
-・星座記号の隣に日本語の星座名を書く
+・星座名 日本語と英語の表記 星座記号 星を結ぶ線の形を一致させる。星座記号の対応は 牡羊座♈ 牡牛座♉ 双子座♊ 蟹座♋ 獅子座♌ 乙女座♍ 天秤座♎ 蠍座♏ 射手座♐ 山羊座♑ 水瓶座♒ 魚座♓。飾りの星を適当につないだ架空の星座や 別の星座の形を描かない。完成前に4つの対応を見直す
 
 【レイアウト】
-・上端から全高40%までがタイトルと絵。最上部8%に星座記号 短い日本語タイトル 控えめな英語副題。続く32%にスイーツと選んだ背景の水彩画
+・上端から全高40%までをタイトルも含めた一体の水彩画にする。星座記号 日本語の星座名と小さな英語名 短い日本語タイトルを背景に自然に添える
 ・全高40%から97%までが明るいアイボリーの文章欄。3段を同じ高さにして古金の細線で区切る
 ・各段の左36%に見出し 右64%に本文。各段の見出しと本文の開始位置を揃え 読みやすい文字と余白を確保する
 ・残る最下部3%に小さな金色の装飾
@@ -155,9 +150,10 @@
 ③ 来年のアクション
 
 【文章ルール】
-・各本文は25〜42字程度を2〜3行にまとめる。句読点「、」「。」は使わない
-・①は振り返りからうかがえる魅力をやさしく表す。星座から性格や未来を断定しない
-・②は本人が書いた努力や学びを具体的にねぎらう。書かれていない性格や実績は作らない
+・①②の本文は25〜45字程度を2〜3行にまとめる。③は12月の一歩と翌年の目標が伝わる長さにして3〜4行に収める。句読点「、」「。」は使わない
+・自然な日本語で本人にやさしく語りかける。大げさな比喩や不自然な言い切りを避け 書いた内容をただ並べず意味の通る文章に整える
+・①は本人の取り組みから伝わる姿勢を自然な言葉で表す。星座から性格や未来を断定しない。「可能性を育む」「輪郭をつかむ」など意味が曖昧な比喩は避ける
+・②は本人が書いた出来事に触れてやさしくねぎらう。書かれていない性格や実績は作らない。入力内容をただ羅列せず 自然な文章に整える
 ・③は「2026年12月の最初の一歩 → 2027年の目標」の順で書く。先に2026年12月に着手できる具体的な行動を1つ 次にその行動につながる2027年の目標を1つ提案する。所要時間は指定しない。受講生の振り返りに応じて制作 練習 受講内容の実践 講評 仲間との学び キャリア探索などから役立つ行動を考える
 ・固定見出しは一字一句そのまま 誤字や文字のはみ出しがないか確認する
 
@@ -183,6 +179,15 @@ ${reflection}
     $('promptPanel').hidden = true;
     $('buildPrompt').hidden = false;
     $('buildPrompt').setAttribute('aria-expanded', 'false');
+    $('openChatGPT').href = 'https://chatgpt.com/';
+    $('modalChat').href = 'https://chatgpt.com/';
+    $('copyStatus').textContent = '';
+    $('modalCopyStatus').textContent = '';
+  }
+
+  function chatUrlFor(text) {
+    const url = 'https://chatgpt.com/?q=' + encodeURIComponent(text);
+    return url.length <= 12000 ? url : 'https://chatgpt.com/';
   }
 
   function revealPrompt() {
@@ -192,7 +197,7 @@ ${reflection}
       promptBuilt = buildPrompt();
       $('inlinePrompt').value = promptBuilt;
       $('promptText').value = promptBuilt;
-      const chatUrl = 'https://chatgpt.com/?q=' + encodeURIComponent(promptBuilt);
+      const chatUrl = chatUrlFor(promptBuilt);
       $('openChatGPT').href = chatUrl;
       $('modalChat').href = chatUrl;
       $('copyStatus').textContent = '';
@@ -230,43 +235,46 @@ ${reflection}
       return;
     }
 
-    // Select synchronously while the click still has user activation.
     const wasHidden = field.hidden;
-    selectPrompt(field);
+    const sourcePage = page;
     let copied = false;
-    try {
-      copied = document.execCommand('copy');
-    } catch {
-      // Clipboard API is tried below when legacy copying is unavailable.
-    }
-
-    if (!copied && navigator.clipboard?.writeText) {
+    if (navigator.clipboard?.writeText) {
       try {
         await navigator.clipboard.writeText(text);
         copied = true;
       } catch {
-        // Keep the selected prompt visible for manual copy.
+        // A visible selection provides a fallback for restricted contexts.
       }
     }
 
+    if (!copied && field.value === text) {
+      selectPrompt(field);
+      try {
+        copied = document.execCommand('copy');
+      } catch {
+        // Leave the text selected for manual copy.
+      }
+    }
+
+    if (field.value !== text || sourcePage !== page) return;
     const message = copied
       ? 'コピーしました。ChatGPTに貼り付けて送信してください。'
       : '自動コピーできませんでした。表示された文章を長押し、または Ctrl+C / ⌘C でコピーしてください。';
     if (copied) field.hidden = wasHidden;
     else selectPrompt(field);
     $('copyStatus').textContent = message;
+    $('modalCopyStatus').textContent = message;
     showToast(message);
   }
 
   function openChatAndCopy(event, field) {
-    event.preventDefault();
     if (!field.value.trim()) {
+      event.preventDefault();
       showToast('先にプロンプトを作成してください');
       return;
     }
-    // Open during the click, before awaiting clipboard permission.
-    const url = 'https://chatgpt.com/?q=' + encodeURIComponent(field.value);
-    window.open(url, '_blank', 'noopener,noreferrer');
+    event.currentTarget.href = chatUrlFor(field.value);
+    // Keep the anchor's native new-tab navigation and start copying on this click.
     void copyPrompt(field);
   }
 

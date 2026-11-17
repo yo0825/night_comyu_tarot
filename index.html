@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#10192f">
 <meta name="description" content="一年の頑張りを 星とスイーツの大人なタロットカードに">
 <title>星の余韻｜一年の私に 星からの贈りもの</title>
-<link rel="preload" href="assets/sample-parfait.webp" as="image">
-<link rel="stylesheet" href="styles.css?v=layout8">
-<script src="app.js?v=layout8" defer></script>
+<link rel="preload" href="assets/sample-canele.webp" as="image">
+<link rel="stylesheet" href="styles.css?v=zodiac-final">
+<script src="app.js?v=zodiac-final" defer></script>
 </head>
 <body class="page-theme-0">
 <div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -30,30 +30,30 @@
         <p class="eyebrow">A LITTLE GIFT FROM THE STARS</p>
         <h1 id="mainTitle" tabindex="-1">今年の私に<br><em>星からの贈りもの</em></h1>
         <p class="description">今年の出会いや小さな一歩を<br>あなただけのカードにしよう</p>
-        <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span class="external-arrow" aria-hidden="true"></span></button>
+        <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span aria-hidden="true">→</span></button>
       </div>
       <div class="hero-gallery" id="galleryRegion" aria-label="タロットカードの完成見本">
         <span class="halo" aria-hidden="true"></span><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
         <span class="deck-back back-a" aria-hidden="true"></span><span class="deck-back back-b" aria-hidden="true"></span>
-        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" width="960" height="1440"></figure>
+        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/sample-canele.webp" alt="月のカヌレのカード見本" width="1024" height="1536"></figure>
         <div class="card-controls"><button type="button" id="prevCard" aria-label="前の見本">‹</button><span class="dots" id="cardDots"></span><button type="button" id="nextCard" aria-label="次の見本">›</button></div>
       </div>
     </section>
 
     <section class="page" data-page="1" hidden aria-labelledby="reflectTitle">
-      <div class="split-page">
+      <div class="reflection-layout">
         <div class="left-panel">
           <h2 id="reflectTitle" tabindex="-1">ワークシートを<br><em>ふりかえる</em></h2>
           <p class="section-description">ワークシートに書いた内容をコピーして、同じ名前の欄に貼り付けてね。</p>
-          <div class="notebook worksheet-fields">
-            <div><label for="connection">① つながり</label><textarea id="connection" rows="3" placeholder="例：勉強会で知り合った仲間と、作ったものを見せ合った"></textarea></div>
+          <div class="notebook worksheet-fields" role="group" aria-label="ワークシートの振り返り">
+            <div><label for="connection">① つながり</label><textarea id="connection" aria-describedby="effortError" rows="3" placeholder="例：勉強会で知り合った仲間と、作ったものを見せ合った"></textarea></div>
             <div><label for="joy">② 喜び</label><textarea id="joy" rows="3" placeholder="例：週末に好きなカフェでゆっくり本を読んだ"></textarea></div>
             <div><label for="challenge">③ 挑戦</label><textarea id="challenge" rows="3" placeholder="例：初めてイベントのバナーを作った"></textarea></div>
             <div><label for="growth">④ 成長</label><textarea id="growth" rows="3" placeholder="例：作ったものの工夫を、自分の言葉で伝えられるようになった"></textarea></div>
             <p id="effortError" class="field-error" role="alert" hidden>どれか1つの欄に内容を貼り付けてね。</p>
           </div>
           <div id="littleStars" class="little-stars" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
-          <div class="bottom-navigation">
+          <div class="bottom-navigation reflection-navigation">
             <button type="button" class="text-button" data-goto="0">← トップへ戻る</button>
             <button type="button" class="text-button" id="clearReflection">入力をクリア</button>
             <button type="button" class="button primary" id="goMake">カード作成へ進む →</button>
@@ -68,22 +68,22 @@
           <p class="eyebrow">02 · A CARD FOR YOU</p><h2 id="createTitle" tabindex="-1">あなたの物語を<br><em>一枚のカードへ</em></h2>
           <p class="section-description">あなたの言葉から 星とスイーツの物語を紡ぎ<br>3つのメッセージを一枚におさめます</p>
           <div class="promises">
-            <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしい魅力</small></section></div>
+            <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしさ</small></section></div>
             <div><span class="promise-symbol">✧</span><section><strong>今年頑張ったこと</strong><small>一歩ずつ重ねてきた努力や挑戦</small></section></div>
             <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2026年12月の最初の一歩 → 2027年の目標</small></section></div>
           </div>
           <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
           <div class="prompt-panel" id="promptPanel" hidden>
-            <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">カード生成用のプロンプト</h3></div>
-            <p class="prompt-help">ChatGPTを開いたら、入力欄のプロンプトを確認して送信してください。文章が入らない場合は、コピーしたプロンプトを貼り付けてください。</p>
-            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開いてプロンプトをコピー <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を確認</button></div>
+            <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">準備ができました</h3></div>
+            <p class="prompt-help">別タブのChatGPTへプロンプトを渡します。文章が送られていない場合は、コピーしたプロンプトを貼り付けて送信してね。</p>
+            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を確認</button></div>
             <p id="copyStatus" role="status" aria-live="polite"></p>
             <div class="finish-guide"><strong>カードができたら</strong><ol><li>ChatGPTで生成した画像を保存してね。</li><li>ワークシートに戻って、保存した画像を貼り付けよう。</li></ol></div>
-            <textarea hidden id="inlinePrompt" aria-labelledby="promptTitle" rows="7" readonly></textarea>
+            <textarea hidden id="inlinePrompt" aria-labelledby="promptTitle" rows="7" readonly spellcheck="false"></textarea>
           </div>
           <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button></div>
         </div>
-        <aside class="right-feature design-aside"><div class="design-overlap"><img id="secondaryDesignImage" src="assets/sample-montblanc.webp" alt="" loading="lazy" width="960" height="1440"><img id="designImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" loading="lazy" width="960" height="1440"></div></aside>
+        <aside class="right-feature design-aside"><div class="design-overlap"><img id="secondaryDesignImage" src="assets/sample-tart.webp" alt="" loading="lazy" width="1024" height="1536"><img id="designImage" src="assets/sample-canele.webp" alt="月のカヌレのカード見本" loading="lazy" width="1024" height="1536"></div></aside>
       </div>
     </section>
 
@@ -91,8 +91,8 @@
   <footer class="footer"><span>✧ A LITTLE STAR FOR YOU ✧</span><button type="button" id="openPrivacy" class="text-button">プライバシーについて</button></footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly></textarea><div class="modal-actions"><button id="modalCopy" class="button primary" type="button">文章をコピー</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
-<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。ChatGPTには、ご自身でプロンプトを貼り付けて送信します。</p></dialog>
+<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly spellcheck="false"></textarea><div class="modal-actions"><p id="modalCopyStatus" role="status"></p><button id="modalCopy" class="button primary" type="button">文章をコピー</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
+<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。「入力をクリア」で消去できます。「ChatGPTを開く」を押すと、作成したプロンプトをURLでChatGPTへ渡し、コピーも行います。開いたChatGPTでプロンプトが送信される場合があります。</p></dialog>
 <dialog class="modal small-modal" id="clearModal" aria-labelledby="clearTitle" aria-describedby="clearDescription">
   <form method="dialog">
     <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3></div>
