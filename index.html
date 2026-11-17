@@ -1,103 +1,327 @@
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10192f">
-<meta name="description" content="一年の頑張りを 星とスイーツの大人なタロットカードに">
-<title>星の余韻｜一年の私に 星からの贈りもの</title>
-<link rel="preload" href="assets/sample-parfait.webp" as="image">
-<link rel="stylesheet" href="styles.css?v=worksheet3">
-<script src="app.js?v=worksheet3" defer></script>
-</head>
-<body class="page-theme-0">
-<div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-<div class="shooting-sky" aria-hidden="true"><span></span><span></span><span></span></div>
-<div class="twinkle-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-<div class="prompt-flash" id="promptFlash" aria-hidden="true" hidden><div class="prompt-flash-inner"><div class="flash-core"></div><p>星のことばを集めています</p></div></div>
-<div class="site">
-  <header class="topbar">
-    <button type="button" class="brand" id="goHome" aria-label="ホームに戻る"><span class="brand-orbit">✧</span><span>星の余韻<small>HOSHI NO YOIN</small></span></button>
-    <div class="top-actions"><span class="top-edition">2026 · NIGHT WORKSHOP</span><button type="button" id="clearAll" class="quiet-button">最初から</button></div>
-  </header>
-  <div class="progress" aria-label="制作のステップ">
-    <div data-progress="1"><b>01</b><span>ふりかえる</span></div><i></i>
-    <div data-progress="2"><b>02</b><span>カードをつくる</span></div>
-  </div>
-  <main>
-    <section class="page hero-page active" data-page="0" aria-labelledby="mainTitle">
-      <div class="hero-copy">
-        <p class="eyebrow">A LITTLE GIFT FROM THE STARS</p>
-        <h1 id="mainTitle" tabindex="-1">今年の私に<br><em>星からの贈りもの</em></h1>
-        <p class="description">今年の出会いや小さな一歩を<br>あなただけのカードにしよう</p>
-        <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span class="external-arrow" aria-hidden="true"></span></button>
-      </div>
-      <div class="hero-gallery" id="galleryRegion" aria-label="タロットカードの完成見本">
-        <span class="halo" aria-hidden="true"></span><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
-        <span class="deck-back back-a" aria-hidden="true"></span><span class="deck-back back-b" aria-hidden="true"></span>
-        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" width="960" height="1440"></figure>
-        <div class="card-controls"><button type="button" id="prevCard" aria-label="前の見本">‹</button><span class="dots" id="cardDots"></span><button type="button" id="nextCard" aria-label="次の見本">›</button></div>
-        <span class="gallery-caption" id="galleryCaption" aria-live="polite">ひとりでは見えなかった色 · 作品見本</span>
-      </div>
-    </section>
+(() => {
+  'use strict';
 
-    <section class="page" data-page="1" hidden aria-labelledby="reflectTitle">
-      <div class="split-page">
-        <div class="left-panel">
-          <h2 id="reflectTitle" tabindex="-1">ワークシートを<br><em>ふりかえる</em></h2>
-          <p class="section-description">ワークシートに書いた内容をコピーして、同じ名前の欄に貼り付けてね。</p>
-          <div class="notebook worksheet-fields">
-            <div><label for="connection">① つながり</label><textarea id="connection" rows="3" placeholder="例：勉強会で知り合った仲間と、作ったものを見せ合った"></textarea></div>
-            <div><label for="joy">② 喜び</label><textarea id="joy" rows="3" placeholder="例：週末に好きなカフェでゆっくり本を読んだ"></textarea></div>
-            <div><label for="challenge">③ 挑戦</label><textarea id="challenge" rows="3" placeholder="例：初めてイベントのバナーを作った"></textarea></div>
-            <div><label for="growth">④ 成長</label><textarea id="growth" rows="3" placeholder="例：作ったものの工夫を、自分の言葉で伝えられるようになった"></textarea></div>
-            <p id="effortError" class="field-error" role="alert" hidden>どれか1つの欄に内容を貼り付けてね。</p>
-          </div>
-          <div id="littleStars" class="little-stars" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
-          <div class="bottom-navigation">
-            <button type="button" class="text-button" data-goto="0">← トップへ戻る</button>
-            <button type="button" class="text-button" id="clearReflection">入力をクリア</button>
-            <button type="button" class="button primary" id="goMake">カード作成へ進む →</button>
-          </div>
-        </div>
-      </div>
-    </section>
+  const $ = id => document.getElementById(id);
+  const storageKey = 'hoshi-no-yoin-requested-v11';
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cards = [
+    { key: 'canele', title: '月のカヌレ', sweet: 'カヌレ', scene: '月明かりが差す菫色の書斎と古い本' },
+    { key: 'strawberry', title: '太陽のいちごタルト', sweet: 'いちごタルト', scene: '金色の灯りがともる夜の花園と薄紫の雲' },
+    { key: 'macaron', title: '星風のマカロン', sweet: 'マカロン', scene: '星が広がるラベンダー色の雲とティーセット' },
+    { key: 'montblanc', title: '森のモンブラン', sweet: 'モンブラン', scene: '深い青緑の森と琥珀色のランタン' },
+    { key: 'gateau', title: '真夜中のガトーショコラ', sweet: 'ガトーショコラ', scene: '真夜中の温室と紫の木の葉' },
+    { key: 'pudding', title: '湖畔のカラメルプリン', sweet: 'カラメルプリン', scene: '三日月を映す湖と藤の咲く茶室' }
+  ];
+  const pages = [...document.querySelectorAll('[data-page]')];
+  const progress = [...document.querySelectorAll('[data-progress]')];
+  const samples = [
+    { key: 'parfait', title: 'ひとりでは見えなかった色' },
+    { key: 'montblanc', title: '森を渡る小さな音' },
+    { key: 'pudding', title: '湖の向こうの道' }
+  ];
+  const artwork = card => 'assets/sample-' + card.key + '.webp';
+  const fields = [['connection', 'つながり'], ['joy', '喜び'], ['challenge', '挑戦'], ['growth', '成長']];
+  const getText = () => fields.map(([id, label]) => [label, $(id).value.trim()]);
+  const hasReflection = () => getText().some(([, value]) => value);
 
-    <section class="page" data-page="2" hidden aria-labelledby="createTitle">
-      <div class="split-page make-layout">
-        <div class="left-panel">
-          <p class="eyebrow">02 · A CARD FOR YOU</p><h2 id="createTitle" tabindex="-1">あなたの物語を<br><em>一枚のカードへ</em></h2>
-          <p class="section-description">あなたの言葉から 星とスイーツの物語を紡ぎ<br>3つのメッセージを一枚におさめます</p>
-          <div class="promises">
-            <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしい魅力</small></section></div>
-            <div><span class="promise-symbol">✧</span><section><strong>今年頑張ったこと</strong><small>一歩ずつ重ねてきた努力や挑戦</small></section></div>
-            <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2026年12月の最初の一歩 → 2027年の目標</small></section></div>
-          </div>
-          <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
-          <div class="prompt-panel" id="promptPanel" hidden>
-            <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">カード生成用のプロンプト</h3></div>
-            <p class="prompt-help">コピーしたプロンプトをChatGPTに貼り付けて送信してください</p>
-            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_top" rel="noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を大きく見る</button></div>
-            <div class="finish-guide"><strong>カードができたら</strong><ol><li>ChatGPTで生成した画像を保存してね。</li><li>ワークシートに戻って、保存した画像を貼り付けよう。</li></ol></div>
-            <textarea hidden id="inlinePrompt" aria-labelledby="promptTitle" rows="7" readonly></textarea>
-          </div>
-          <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button></div>
-        </div>
-        <aside class="right-feature design-aside"><div class="design-overlap"><img id="secondaryDesignImage" src="assets/sample-sun.webp" alt="" loading="lazy" width="960" height="1440"><img id="designImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" loading="lazy" width="960" height="1440"></div></aside>
-      </div>
-    </section>
+  let page = 0;
+  let cardIndex = 0;
+  let toastTimer;
+  let promptTimer;
+  let promptBuilt = '';
+  let clearEverything = false;
 
-  </main>
-  <footer class="footer"><span>✧ A LITTLE STAR FOR YOU ✧</span><button type="button" id="openPrivacy" class="text-button">プライバシーについて</button></footer>
-</div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly></textarea><div class="modal-actions"><button id="modalCopy" class="button primary" type="button">文章をコピー</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_top" rel="noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
-<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。ChatGPTには、ご自身でプロンプトを貼り付けて送信します。</p></dialog>
-<dialog class="modal small-modal" id="clearModal" aria-labelledby="clearTitle" aria-describedby="clearDescription">
-  <form method="dialog">
-    <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3></div>
-    <p id="clearDescription"></p>
-    <div class="modal-actions"><button type="submit" value="cancel" class="button secondary" autofocus>キャンセル</button><button value="confirm" class="button primary" id="confirmClear" type="submit">クリアする</button></div>
-  </form>
-</dialog>
-</body></html>
+  function showToast(message) {
+    const toast = $('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(
+        Object.fromEntries(fields.map(([id]) => [id, $(id).value]))
+      ));
+    } catch {
+      // Input remains available for this session.
+    }
+  }
+
+  function restore() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
+      for (const [id] of fields) {
+        const value = saved[id] ?? (id === 'challenge' ? saved.effort : '');
+        if (typeof value === 'string') $(id).value = value;
+      }
+    } catch {
+      // Ignore an unreadable draft.
+    }
+  }
+
+  function showEffortError(visible) {
+    $('effortError').hidden = !visible;
+    if (visible) $('connection').setAttribute('aria-invalid', 'true');
+    else $('connection').removeAttribute('aria-invalid');
+  }
+
+  function setPage(next, focus = true) {
+    if (next >= 2 && !hasReflection()) {
+      if (page !== 1) setPage(1, false);
+      showEffortError(true);
+      $('connection').focus();
+      return;
+    }
+    if (next !== page) cancelGlow();
+    page = next;
+    pages.forEach((section, index) => {
+      section.hidden = index !== page;
+      section.classList.toggle('active', index === page);
+    });
+    progress.forEach((step, index) => {
+      step.classList.toggle('current', page === index + 1);
+      step.classList.toggle('done', page > index + 1);
+      if (page === index + 1) step.setAttribute('aria-current', 'step');
+      else step.removeAttribute('aria-current');
+    });
+    document.body.className = 'page-theme-' + page;
+    if (focus) $(pages[page].getAttribute('aria-labelledby')).focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function showCard(index) {
+    cardIndex = (index + samples.length) % samples.length;
+    const card = samples[cardIndex];
+    const image = $('featureImage');
+    image.src = artwork(card);
+    image.alt = card.title + 'のカード見本';
+    if (!reducedMotion.matches && image.animate) {
+      image.getAnimations().forEach(animation => animation.cancel());
+      image.animate([{ opacity: 0.5 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+    }
+    [...$('cardDots').children].forEach((dot, i) => dot.setAttribute('aria-current', String(i === cardIndex)));
+  }
+
+  function setupCards() {
+    samples.forEach((card, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-label', card.title);
+      button.setAttribute('aria-current', String(index === cardIndex));
+      button.addEventListener('click', () => showCard(index));
+      $('cardDots').append(button);
+    });
+  }
+
+  function updateDesign() {
+    const card = samples[0];
+    $('designImage').src = artwork(card);
+    $('designImage').alt = card.title + 'のカード見本';
+    $('secondaryDesignImage').src = artwork(samples[1]);
+  }
+
+  function updateCounts() {
+    const count = getText().filter(([, value]) => value).length;
+    [...$('littleStars').children].forEach((star, index) => star.classList.toggle('lit', index < count));
+  }
+
+  function buildPrompt() {
+    const reflection = getText().map(([label, value]) => label + "： " + (value || "未記入")).join("\n");
+    return `【画像生成】以下の振り返りから 星座×スイーツ×タロットカードの完成画像を1枚生成してください
+
+【カードの仕様】
+・縦長2:3 画像全体が1枚のカード 安全余白5%
+・細いアンティークゴールドの二重枠 四隅は小さく丸める
+・古金とアイボリーを共通にした 繊細な手描き水彩と水彩紙
+・本人の言葉に合う星座モチーフを1つ選ぶ
+・星座とスイーツを1つずつ選ぶ。候補はパフェ カヌレ タルト マカロン プリン モンブランなど。スイーツ本体は横幅の約60〜65%を目安に手前に描く
+・四隅に古金の植物装飾 区切り線に小さな菱形 最下部に月と小枝の飾りを添える。絵には場面に合う花や灯りを使う。文章の周りには十分な余白を残す
+・添付見本があれば構図と画風の参考にする
+
+・色と光と背景は振り返りに合わせて選ぶ。菫色の月夜 暖かなアプリコットの花園 群青の星空 深緑と琥珀の森などから変化をつける
+・星座記号の隣に日本語の星座名を書く
+
+【レイアウト】
+・上端から全高40%までがタイトルと絵。最上部8%に星座記号 短い日本語タイトル 控えめな英語副題。続く32%にスイーツと選んだ背景の水彩画
+・全高40%から97%までが明るいアイボリーの文章欄。3段を同じ高さにして古金の細線で区切る
+・各段の左36%に見出し 右64%に本文。各段の見出しと本文の開始位置を揃え 読みやすい文字と余白を確保する
+・残る最下部3%に小さな金色の装飾
+
+【固定見出し】
+① あなたのタイプ
+② 今年頑張ったこと
+③ 来年のアクション
+
+【文章ルール】
+・各本文は25〜42字程度を2〜3行にまとめる。句読点「、」「。」は使わない
+・①は振り返りからうかがえる魅力をやさしく表す。星座から性格や未来を断定しない
+・②は本人が書いた努力や学びを具体的にねぎらう。書かれていない性格や実績は作らない
+・③は「2026年12月の最初の一歩 → 2027年の目標」の順で書く。先に2026年12月に着手できる具体的な行動を1つ 次にその行動につながる2027年の目標を1つ提案する。所要時間は指定しない。受講生の振り返りに応じて制作 練習 受講内容の実践 講評 仲間との学び キャリア探索などから役立つ行動を考える
+・固定見出しは一字一句そのまま 誤字や文字のはみ出しがないか確認する
+
+【本人の振り返り】
+${reflection}
+
+記入された項目を使い 未記入の内容は作らず 完成カードを1枚生成してください。`;
+  }
+
+  function cancelGlow() {
+    clearTimeout(promptTimer);
+    promptTimer = undefined;
+    $('promptFlash').hidden = true;
+    $('buildPrompt').disabled = false;
+    $('buildPrompt').removeAttribute('aria-busy');
+  }
+
+  function invalidatePrompt() {
+    cancelGlow();
+    promptBuilt = '';
+    $('inlinePrompt').value = '';
+    $('promptText').value = '';
+    $('promptPanel').hidden = true;
+    $('buildPrompt').hidden = false;
+    $('buildPrompt').setAttribute('aria-expanded', 'false');
+  }
+
+  function revealPrompt() {
+    if (promptTimer !== undefined) return;
+    const finish = () => {
+      cancelGlow();
+      promptBuilt = buildPrompt();
+      $('inlinePrompt').value = promptBuilt;
+      $('promptText').value = promptBuilt;
+      const chatUrl = 'https://chatgpt.com/?q=' + encodeURIComponent(promptBuilt);
+      $('openChatGPT').href = chatUrl;
+      $('modalChat').href = chatUrl;
+      $('copyStatus').textContent = '';
+      $('promptPanel').hidden = false;
+      $('buildPrompt').setAttribute('aria-expanded', 'true');
+      $('buildPrompt').hidden = true;
+      $('promptTitle').focus();
+      showToast('プロンプトを作成しました');
+    };
+    if (reducedMotion.matches) {
+      finish();
+      return;
+    }
+    $('buildPrompt').disabled = true;
+    $('buildPrompt').setAttribute('aria-busy', 'true');
+    $('promptFlash').hidden = false;
+    promptTimer = setTimeout(finish, 840);
+  }
+
+  function showPromptModal() {
+    if (!$('promptModal').open) $('promptModal').showModal();
+  }
+
+  function selectPrompt(field) {
+    field.hidden = false;
+    field.focus({ preventScroll: true });
+    field.select();
+    field.setSelectionRange(0, field.value.length);
+  }
+
+  async function copyPrompt(field) {
+    const text = field.value;
+    if (!text.trim()) {
+      showToast('先にプロンプトを作成してください');
+      return;
+    }
+
+    // Select synchronously while the click still has user activation.
+    const wasHidden = field.hidden;
+    selectPrompt(field);
+    let copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch {
+      // Clipboard API is tried below when legacy copying is unavailable.
+    }
+
+    if (!copied && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } catch {
+        // Keep the selected prompt visible for manual copy.
+      }
+    }
+
+    const message = copied
+      ? 'コピーしました。ChatGPTに貼り付けて送信してください。'
+      : '自動コピーできませんでした。表示された文章を長押し、または Ctrl+C / ⌘C でコピーしてください。';
+    if (copied) field.hidden = wasHidden;
+    else selectPrompt(field);
+    $('copyStatus').textContent = message;
+    showToast(message);
+  }
+
+  function openClear(all) {
+    clearEverything = all;
+    $('clearTitle').textContent = all ? '最初からやり直しますか？' : '入力をクリアしますか？';
+    $('clearDescription').textContent = all
+      ? '振り返りとプロンプトが消去されます。'
+      : '振り返りの4項目とプロンプトが消去されます。';
+    $('clearModal').returnValue = '';
+    $('clearModal').showModal();
+  }
+
+  function clearDraft() {
+    for (const [id] of fields) $(id).value = '';
+    showEffortError(false);
+    invalidatePrompt();
+    if (clearEverything) {
+      updateDesign();
+      showCard(0);
+      setPage(0);
+    }
+    updateCounts();
+    save();
+    if (!clearEverything) $('connection').focus();
+    showToast(clearEverything ? '最初の状態に戻しました' : '入力内容をクリアしました');
+  }
+
+  function reflectionChanged() {
+    if (hasReflection()) showEffortError(false);
+    invalidatePrompt();
+    updateCounts();
+    save();
+  }
+
+  function bind() {
+    $('goHome').addEventListener('click', () => setPage(0));
+    $('start').addEventListener('click', () => setPage(1));
+    $('goMake').addEventListener('click', () => setPage(2));
+    document.querySelectorAll('[data-goto]').forEach(button => {
+      button.addEventListener('click', () => setPage(Number(button.dataset.goto)));
+    });
+
+    for (const [id] of fields) $(id).addEventListener('input', reflectionChanged);
+    $('clearReflection').addEventListener('click', () => openClear(false));
+    $('clearAll').addEventListener('click', () => openClear(true));
+    $('clearModal').addEventListener('close', () => {
+      if ($('clearModal').returnValue === 'confirm') clearDraft();
+    });
+
+    $('prevCard').addEventListener('click', () => showCard(cardIndex - 1));
+    $('nextCard').addEventListener('click', () => showCard(cardIndex + 1));
+
+    $('buildPrompt').addEventListener('click', revealPrompt);
+    $('copyPrompt').addEventListener('click', () => copyPrompt($('inlinePrompt')));
+    $('viewPrompt').addEventListener('click', showPromptModal);
+    $('modalCopy').addEventListener('click', () => copyPrompt($('promptText')));
+    $('closePrompt').addEventListener('click', () => $('promptModal').close());
+    $('openPrivacy').addEventListener('click', () => $('privacyModal').showModal());
+    $('closePrivacy').addEventListener('click', () => $('privacyModal').close());
+
+  }
+
+  setupCards();
+  restore();
+  bind();
+  updateDesign();
+  updateCounts();
+  setPage(0, false);
+})();
