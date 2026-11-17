@@ -7,8 +7,8 @@
 <meta name="description" content="一年の頑張りを 星とスイーツの大人なタロットカードに">
 <title>星の余韻｜一年の私に 星からの贈りもの</title>
 <link rel="preload" href="assets/sample-parfait.webp" as="image">
-<link rel="stylesheet" href="styles.css?v=worksheet">
-<script src="app.js?v=worksheet" defer></script>
+<link rel="stylesheet" href="styles.css?v=worksheet3">
+<script src="app.js?v=worksheet3" defer></script>
 </head>
 <body class="page-theme-0">
 <div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -29,15 +29,15 @@
       <div class="hero-copy">
         <p class="eyebrow">A LITTLE GIFT FROM THE STARS</p>
         <h1 id="mainTitle" tabindex="-1">今年の私に<br><em>星からの贈りもの</em></h1>
-        <p class="description">頑張ったことも 好きだった時間も<br>大人っぽい一枚のカードに やさしく閉じ込めます</p>
+        <p class="description">今年の出会いや小さな一歩を<br>あなただけのカードにしよう</p>
         <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span class="external-arrow" aria-hidden="true"></span></button>
       </div>
       <div class="hero-gallery" id="galleryRegion" aria-label="タロットカードの完成見本">
         <span class="halo" aria-hidden="true"></span><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
         <span class="deck-back back-a" aria-hidden="true"></span><span class="deck-back back-b" aria-hidden="true"></span>
-        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/sample-parfait.webp" alt="つながりを紡ぐ学びの星のカード見本" width="960" height="1440"></figure>
+        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" width="960" height="1440"></figure>
         <div class="card-controls"><button type="button" id="prevCard" aria-label="前の見本">‹</button><span class="dots" id="cardDots"></span><button type="button" id="nextCard" aria-label="次の見本">›</button></div>
-        <span class="gallery-caption" id="galleryCaption" aria-live="polite">つながりを紡ぐ学びの星 · 作品見本</span>
+        <span class="gallery-caption" id="galleryCaption" aria-live="polite">ひとりでは見えなかった色 · 作品見本</span>
       </div>
     </section>
 
@@ -47,10 +47,10 @@
           <h2 id="reflectTitle" tabindex="-1">ワークシートを<br><em>ふりかえる</em></h2>
           <p class="section-description">ワークシートに書いた内容をコピーして、同じ名前の欄に貼り付けてね。</p>
           <div class="notebook worksheet-fields">
-            <div><label for="connection">① つながり</label><textarea id="connection" rows="3" placeholder="心に残った出会いや交流"></textarea></div>
-            <div><label for="joy">② 喜び</label><textarea id="joy" rows="3" placeholder="楽しかったこと"></textarea></div>
-            <div><label for="challenge">③ 挑戦</label><textarea id="challenge" rows="3" placeholder="今年やってみたこと"></textarea></div>
-            <div><label for="growth">④ 成長</label><textarea id="growth" rows="3" placeholder="できるようになったこと"></textarea></div>
+            <div><label for="connection">① つながり</label><textarea id="connection" rows="3" placeholder="例：勉強会で知り合った仲間と、作ったものを見せ合った"></textarea></div>
+            <div><label for="joy">② 喜び</label><textarea id="joy" rows="3" placeholder="例：週末に好きなカフェでゆっくり本を読んだ"></textarea></div>
+            <div><label for="challenge">③ 挑戦</label><textarea id="challenge" rows="3" placeholder="例：初めてイベントのバナーを作った"></textarea></div>
+            <div><label for="growth">④ 成長</label><textarea id="growth" rows="3" placeholder="例：作ったものの工夫を、自分の言葉で伝えられるようになった"></textarea></div>
             <p id="effortError" class="field-error" role="alert" hidden>どれか1つの欄に内容を貼り付けてね。</p>
           </div>
           <div id="littleStars" class="little-stars" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
@@ -71,7 +71,7 @@
           <div class="promises">
             <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしい魅力</small></section></div>
             <div><span class="promise-symbol">✧</span><section><strong>今年頑張ったこと</strong><small>一歩ずつ重ねてきた努力や挑戦</small></section></div>
-            <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2027年の方向性と 2026年12月の最初の一歩</small></section></div>
+            <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2026年12月の最初の一歩 → 2027年の目標</small></section></div>
           </div>
           <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
           <div class="prompt-panel" id="promptPanel" hidden>
@@ -83,7 +83,7 @@
           </div>
           <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button></div>
         </div>
-        <aside class="right-feature design-aside"><div class="design-overlap"><img id="secondaryDesignImage" src="assets/sample-sun.webp" alt="" loading="lazy" width="960" height="1440"><img id="designImage" src="assets/sample-parfait.webp" alt="つながりを紡ぐ学びの星のカード見本" loading="lazy" width="960" height="1440"></div></aside>
+        <aside class="right-feature design-aside"><div class="design-overlap"><img id="secondaryDesignImage" src="assets/sample-sun.webp" alt="" loading="lazy" width="960" height="1440"><img id="designImage" src="assets/sample-parfait.webp" alt="ひとりでは見えなかった色のカード見本" loading="lazy" width="960" height="1440"></div></aside>
       </div>
     </section>
 
