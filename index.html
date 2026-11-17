@@ -6,15 +6,15 @@
 <meta name="theme-color" content="#10192f">
 <meta name="description" content="一年の頑張りを 星とスイーツの大人なタロットカードに">
 <title>星の余韻｜一年の私に 星からの贈りもの</title>
-<link rel="preload" href="assets/card_canele.webp" as="image">
-<link rel="stylesheet" href="styles.css">
-<script src="app.js" defer></script>
+<link rel="preload" href="assets/sample-parfait.webp" as="image">
+<link rel="stylesheet" href="styles.css?v=worksheet">
+<script src="app.js?v=worksheet" defer></script>
 </head>
 <body class="page-theme-0">
 <div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <div class="shooting-sky" aria-hidden="true"><span></span><span></span><span></span></div>
 <div class="twinkle-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-<div class="prompt-flash" id="promptFlash" aria-hidden="true"><div class="prompt-flash-inner"><div class="flash-core"></div><p>星のことばを集めています</p></div></div>
+<div class="prompt-flash" id="promptFlash" aria-hidden="true" hidden><div class="prompt-flash-inner"><div class="flash-core"></div><p>星のことばを集めています</p></div></div>
 <div class="site">
   <header class="topbar">
     <button type="button" class="brand" id="goHome" aria-label="ホームに戻る"><span class="brand-orbit">✧</span><span>星の余韻<small>HOSHI NO YOIN</small></span></button>
@@ -22,96 +22,82 @@
   </header>
   <div class="progress" aria-label="制作のステップ">
     <div data-progress="1"><b>01</b><span>ふりかえる</span></div><i></i>
-    <div data-progress="2"><b>02</b><span>カードをつくる</span></div><i></i>
-    <div data-progress="3"><b>03</b><span>想いを届ける</span></div>
+    <div data-progress="2"><b>02</b><span>カードをつくる</span></div>
   </div>
   <main>
     <section class="page hero-page active" data-page="0" aria-labelledby="mainTitle">
       <div class="hero-copy">
         <p class="eyebrow">A LITTLE GIFT FROM THE STARS</p>
-        <h1 id="mainTitle">今年の私に<br><em>星からの贈りもの</em></h1>
+        <h1 id="mainTitle" tabindex="-1">今年の私に<br><em>星からの贈りもの</em></h1>
         <p class="description">頑張ったことも 好きだった時間も<br>大人っぽい一枚のカードに やさしく閉じ込めます</p>
-        <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span aria-hidden="true">↗</span></button>
-        <div class="hero-facts"><span>✧ 入力は2つだけ</span><span>✧ デザインはAIにおまかせ</span><span>✧ 画像は1枚だけ生成</span></div>
+        <button type="button" id="start" class="button primary large"><span>私だけのカードをつくる</span><span class="external-arrow" aria-hidden="true"></span></button>
       </div>
       <div class="hero-gallery" id="galleryRegion" aria-label="タロットカードの完成見本">
         <span class="halo" aria-hidden="true"></span><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
         <span class="deck-back back-a" aria-hidden="true"></span><span class="deck-back back-b" aria-hidden="true"></span>
-        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/card_canele.webp" alt="月のカヌレのカード見本" width="1200" height="1800"></figure>
+        <figure class="feature-card" id="featureCard"><img id="featureImage" src="assets/sample-parfait.webp" alt="つながりを紡ぐ学びの星のカード見本" width="960" height="1440"></figure>
         <div class="card-controls"><button type="button" id="prevCard" aria-label="前の見本">‹</button><span class="dots" id="cardDots"></span><button type="button" id="nextCard" aria-label="次の見本">›</button></div>
-        <span class="gallery-caption" id="galleryCaption">月のカヌレ · 作品見本</span>
+        <span class="gallery-caption" id="galleryCaption" aria-live="polite">つながりを紡ぐ学びの星 · 作品見本</span>
       </div>
     </section>
 
     <section class="page" data-page="1" hidden aria-labelledby="reflectTitle">
       <div class="split-page">
         <div class="left-panel">
-          <p class="eyebrow">01 · REFLECT</p>
-          <h2 id="reflectTitle">この一年を<br><em>やさしく振り返る</em></h2>
-          <p class="section-description">思い出したことを そのまま書いてください<br>小さなことも 大切な歩みのひとつです</p>
-          <div class="notebook">
-            <div class="field"><div class="field-label"><label for="effort">今年頑張ったこと・できたこと</label><span>必須</span></div>
-              <textarea id="effort" maxlength="520" rows="5" placeholder="例 仕事とSHElikesの学びを両立して 初めてバナーを完成させた"></textarea>
-              <div class="field-meta"><div class="suggestions"><button data-field="effort" data-value="仕事と学びを両立した" type="button">仕事と学び</button><button data-field="effort" data-value="初めての作品づくりに挑戦した" type="button">はじめての挑戦</button><button data-field="effort" data-value="少しずつ学びを続けた" type="button">学びの継続</button></div><small id="effortCount">0 / 520</small></div>
-            </div>
-            <div class="field-separator">✧</div>
-            <div class="field"><div class="field-label"><label for="joy">楽しかったこと・人とのつながり</label><span class="optional">任意</span></div>
-              <textarea id="joy" maxlength="350" rows="4" placeholder="例 コミュニティで仲間と励まし合えた 旅行先で素敵な景色に出会えた"></textarea>
-              <div class="field-meta"><div class="suggestions"><button data-field="joy" data-value="新しい仲間と出会った" type="button">新しい出会い</button><button data-field="joy" data-value="好きなことに夢中になれた" type="button">好きな時間</button></div><small id="joyCount">0 / 350</small></div>
-            </div>
+          <h2 id="reflectTitle" tabindex="-1">ワークシートを<br><em>ふりかえる</em></h2>
+          <p class="section-description">ワークシートに書いた内容をコピーして、同じ名前の欄に貼り付けてね。</p>
+          <div class="notebook worksheet-fields">
+            <div><label for="connection">① つながり</label><textarea id="connection" rows="3" placeholder="心に残った出会いや交流"></textarea></div>
+            <div><label for="joy">② 喜び</label><textarea id="joy" rows="3" placeholder="楽しかったこと"></textarea></div>
+            <div><label for="challenge">③ 挑戦</label><textarea id="challenge" rows="3" placeholder="今年やってみたこと"></textarea></div>
+            <div><label for="growth">④ 成長</label><textarea id="growth" rows="3" placeholder="できるようになったこと"></textarea></div>
+            <p id="effortError" class="field-error" role="alert" hidden>どれか1つの欄に内容を貼り付けてね。</p>
           </div>
-          <div class="bottom-navigation reflection-navigation">
-            <button class="text-button" type="button" data-goto="0">← 戻る</button>
-            <div class="reflection-actions">
-              <button class="clear-input-button" id="clearReflection" type="button" aria-label="振り返りの入力をクリアする">入力をクリア</button>
-              <button class="button primary" type="button" id="goMake">カードに想いを込める <span>→</span></button>
-            </div>
+          <div id="littleStars" class="little-stars" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
+          <div class="bottom-navigation">
+            <button type="button" class="text-button" data-goto="0">← トップへ戻る</button>
+            <button type="button" class="text-button" id="clearReflection">入力をクリア</button>
+            <button type="button" class="button primary" id="goMake">カード作成へ進む →</button>
           </div>
-          <p class="privacy-line">✧ 入力内容はこの端末のブラウザに保存されます</p>
         </div>
-        <aside class="right-feature reflection-aside"><div class="small-frame"><img src="assets/card_macaron.webp" alt="マカロンのカードの見本"></div><p>どんな小さな一歩も<br>あなただけの物語を彩る星になります</p><div id="littleStars" class="little-stars" aria-label="書いた言葉に応じて星が灯る"><span>✦</span><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div></aside>
       </div>
     </section>
 
     <section class="page" data-page="2" hidden aria-labelledby="createTitle">
       <div class="split-page make-layout">
         <div class="left-panel">
-          <p class="eyebrow">02 · A CARD FOR YOU</p><h2 id="createTitle">あなたの物語を<br><em>一枚のカードへ</em></h2>
+          <p class="eyebrow">02 · A CARD FOR YOU</p><h2 id="createTitle" tabindex="-1">あなたの物語を<br><em>一枚のカードへ</em></h2>
           <p class="section-description">あなたの言葉から 星とスイーツの物語を紡ぎ<br>3つのメッセージを一枚におさめます</p>
           <div class="promises">
             <div><span class="promise-symbol">☾</span><section><strong>あなたのタイプ</strong><small>振り返りから見える あなたらしい魅力</small></section></div>
             <div><span class="promise-symbol">✧</span><section><strong>今年頑張ったこと</strong><small>一歩ずつ重ねてきた努力や挑戦</small></section></div>
             <div><span class="promise-symbol">❃</span><section><strong>来年のアクション</strong><small>2027年の方向性と 2026年12月の最初の一歩</small></section></div>
           </div>
-          <button type="button" id="buildPrompt" class="button primary wide">プロンプトを作成する <span>✦</span></button>
+          <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
           <div class="prompt-panel" id="promptPanel" hidden>
-            <div class="prompt-head"><strong>カード生成用のプロンプト</strong><small>あなたの振り返りに合わせて作成しました</small></div>
-            <textarea id="inlinePrompt" rows="11" readonly></textarea>
-            <div class="prompt-actions"><button type="button" id="openChatGPT" class="button primary">ChatGPTでカードを生成する <span>↗</span></button><button type="button" id="copyPrompt" class="button secondary">生成プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button dark">内容を大きく見る</button></div>
+            <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">カード生成用のプロンプト</h3></div>
+            <p class="prompt-help">コピーしたプロンプトをChatGPTに貼り付けて送信してください</p>
+            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_top" rel="noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を大きく見る</button></div>
+            <div class="finish-guide"><strong>カードができたら</strong><ol><li>ChatGPTで生成した画像を保存してね。</li><li>ワークシートに戻って、保存した画像を貼り付けよう。</li></ol></div>
+            <textarea hidden id="inlinePrompt" aria-labelledby="promptTitle" rows="7" readonly></textarea>
           </div>
-          <details class="details"><summary>構図をより近づけたいとき</summary><div><p>このページの見本カードや 構図見本を一緒にChatGPTへ添付すると 近いレイアウトに寄せやすくなります</p><a id="downloadSample" href="assets/card_canele.webp" download="星の余韻_カード見本.webp">見本カードを保存する ↗</a><a id="downloadLayout" href="assets/layout_reference.png" download="カード構図見本.png">構図見本を保存する ↗</a></div></details>
-          <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button><button class="button secondary" type="button" id="goShare">画像ができたら 次へ <span>→</span></button></div>
+          <div class="bottom-navigation"><button class="text-button" type="button" data-goto="1">← 振り返りを編集</button></div>
         </div>
-        <aside class="right-feature design-aside"><div class="design-overlap"><img src="assets/card_strawberry.webp" alt="いちごタルトの見本"><img src="assets/card_canele.webp" alt="カヌレの見本"></div><p>夜空とスイーツの絵は上部約1/3に<br>3つの言葉は余白を活かしてゆったりと</p></aside>
+        <aside class="right-feature design-aside"><div class="design-overlap"><img id="secondaryDesignImage" src="assets/sample-sun.webp" alt="" loading="lazy" width="960" height="1440"><img id="designImage" src="assets/sample-parfait.webp" alt="つながりを紡ぐ学びの星のカード見本" loading="lazy" width="960" height="1440"></div></aside>
       </div>
     </section>
 
-    <section class="page" data-page="3" hidden aria-labelledby="shareTitle">
-      <div class="split-page share-layout">
-        <div class="left-panel">
-          <p class="eyebrow">03 · SHARE YOUR LIGHT</p><h2 id="shareTitle">その一歩を<br><em>誰かの光に</em></h2><p class="section-description">この一年の頑張りを ことばにして届けましょう</p>
-          <div class="notebook share-editor"><div class="field-label"><label for="postText">Xへの投稿文</label><small id="postCount">0 / 280</small></div><textarea id="postText" maxlength="280" rows="8" placeholder="振り返りから投稿文を作成します"></textarea><button type="button" class="text-button dark" id="rebuildPost">✧ 振り返りから文章を作り直す</button></div>
-          <div class="share-buttons"><button class="button primary" id="nativeShare" type="button" hidden>画像と文章を共有 <span>↗</span></button><button class="button primary" id="postToX" type="button">Xで投稿文を開く <span>↗</span></button><button class="button secondary" id="copyPost" type="button">文章をコピー</button></div>
-          <p class="share-hint" id="shareHint">Xで投稿文を開いたあと 画像を添付して投稿してください</p>
-          <div class="bottom-navigation"><button class="text-button" type="button" data-goto="2">← カード生成に戻る</button><button class="text-button" type="button" id="downloadMemo">振り返りメモを保存 ↓</button></div>
-        </div>
-        <aside class="upload-area" id="uploadArea"><p class="eyebrow">YOUR LITTLE STAR</p><div id="uploadPlaceholder" class="upload-placeholder"><span>✦</span><p>完成したカードを<br>ここに飾りましょう</p></div><div id="uploadedBox" class="uploaded-box" hidden><img id="uploadedImage" alt="アップロードしたカード画像"></div><label class="upload-button" for="imageFile">＋ 完成カードの画像を選ぶ</label><input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp" class="hidden-file"><p id="imageStatus" class="image-status">ChatGPTで保存した画像を選択してください</p></aside>
-      </div>
-    </section>
   </main>
   <footer class="footer"><span>✧ A LITTLE STAR FOR YOU ✧</span><button type="button" id="openPrivacy" class="text-button">プライバシーについて</button></footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<dialog class="modal" id="promptModal"><div class="modal-head"><h3>画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" rows="15" readonly></textarea><div class="modal-actions"><button id="modalCopy" class="button primary" type="button">文章をコピー</button><button id="modalChat" class="button secondary" type="button">ChatGPTを開く</button></div></dialog>
-<dialog class="modal small-modal" id="privacyModal"><div class="modal-head"><h3>プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>入力内容はこの端末のブラウザに一時保存されます<br>ChatGPTを開く際はURLに入力内容が含まれるため 個人情報や機密情報の入力は避けてください</p><p>Xの投稿画面には文章を渡せますが 画像の自動添付は端末の共有機能に依存します</p></dialog>
+<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly></textarea><div class="modal-actions"><button id="modalCopy" class="button primary" type="button">文章をコピー</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_top" rel="noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
+<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。ChatGPTには、ご自身でプロンプトを貼り付けて送信します。</p></dialog>
+<dialog class="modal small-modal" id="clearModal" aria-labelledby="clearTitle" aria-describedby="clearDescription">
+  <form method="dialog">
+    <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3></div>
+    <p id="clearDescription"></p>
+    <div class="modal-actions"><button type="submit" value="cancel" class="button secondary" autofocus>キャンセル</button><button value="confirm" class="button primary" id="confirmClear" type="submit">クリアする</button></div>
+  </form>
+</dialog>
 </body></html>

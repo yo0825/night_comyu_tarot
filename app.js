@@ -1,199 +1,314 @@
-(()=>{
+(() => {
   'use strict';
-  const $=id=>document.getElementById(id);
-  const KEY='hoshi-no-yoin-requested-v11';
-  const cards=[
-    {src:'assets/card_canele.webp',title:'月のカヌレ'},
-    {src:'assets/card_strawberry.webp',title:'太陽のいちごタルト'},
-    {src:'assets/card_macaron.webp',title:'星風のマカロン'},
-    {src:'assets/card_montblanc.webp',title:'森のモンブラン'}
+
+  const $ = id => document.getElementById(id);
+  const storageKey = 'hoshi-no-yoin-requested-v11';
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cards = [
+    { key: 'canele', title: '月のカヌレ', sweet: 'カヌレ', scene: '月明かりが差す菫色の書斎と古い本' },
+    { key: 'strawberry', title: '太陽のいちごタルト', sweet: 'いちごタルト', scene: '金色の灯りがともる夜の花園と薄紫の雲' },
+    { key: 'macaron', title: '星風のマカロン', sweet: 'マカロン', scene: '星が広がるラベンダー色の雲とティーセット' },
+    { key: 'montblanc', title: '森のモンブラン', sweet: 'モンブラン', scene: '深い青緑の森と琥珀色のランタン' },
+    { key: 'gateau', title: '真夜中のガトーショコラ', sweet: 'ガトーショコラ', scene: '真夜中の温室と紫の木の葉' },
+    { key: 'pudding', title: '湖畔のカラメルプリン', sweet: 'カラメルプリン', scene: '三日月を映す湖と藤の咲く茶室' }
   ];
-  let page=0, cardIndex=0, timer=null, changing=false, toastTimer=null;
-  let postTouched=false, photo=null, photoURL=null, promptBuilt='';
+  const pages = [...document.querySelectorAll('[data-page]')];
+  const progress = [...document.querySelectorAll('[data-progress]')];
+  const samples = [
+    { key: 'parfait', title: 'つながりを紡ぐ学びの星' },
+    { key: 'sun', title: '小さな一歩に咲く光' }
+  ];
+  const artwork = card => 'assets/sample-' + card.key + '.webp';
+  const fields = [['connection', 'つながり'], ['joy', '喜び'], ['challenge', '挑戦'], ['growth', '成長']];
+  const getText = () => fields.map(([id, label]) => [label, $(id).value.trim()]);
+  const hasReflection = () => getText().some(([, value]) => value);
 
-  const getText=()=>({effort:$('effort').value.trim(), joy:$('joy').value.trim()});
-  const chars=s=>[...s].length;
-  const clip=(s,n)=>chars(s)>n?[...s].slice(0,n-1).join('')+'…':s;
+  let page = 0;
+  let cardIndex = 0;
+  let toastTimer;
+  let promptTimer;
+  let promptBuilt = '';
+  let clearEverything = false;
 
-  function showToast(msg){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),3200);}  
-  function save(){ try{ localStorage.setItem(KEY, JSON.stringify({...getText(), post:$('postText').value, postTouched})); }catch(_e){} }
-  function restore(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||'null'); if(!d) return; if(typeof d.effort==='string') $('effort').value=d.effort; if(typeof d.joy==='string') $('joy').value=d.joy; if(typeof d.post==='string') $('postText').value=d.post; postTouched=Boolean(d.postTouched);}catch(_e){} }
-
-  function setThemeClass(){ document.body.className='page-theme-'+page; }
-  function setPage(next){
-    next=Number(next);
-    if(next>=2 && !getText().effort){ showToast('まずは 今年頑張ったことを入力してください'); next=1; }
-    page=Math.max(0,Math.min(3,next));
-    document.querySelectorAll('[data-page]').forEach(sec=>{ const on=Number(sec.dataset.page)===page; sec.hidden=!on; sec.classList.toggle('active',on); });
-    document.querySelectorAll('[data-progress]').forEach((step,i)=>{ const idx=i+1; step.classList.toggle('current', page===idx); step.classList.toggle('done', page>idx); });
-    setThemeClass();
-    if(page===0) startSlider(); else stopSlider();
-    if(page===3 && !postTouched) buildPost(false);
-    window.scrollTo({top:0,behavior:'instant'});
+  function showToast(message) {
+    const toast = $('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
   }
 
-  function renderDots(){
-    const dots=$('cardDots'); dots.innerHTML='';
-    cards.forEach((card,i)=>{ const b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',card.title); b.setAttribute('aria-current', String(i===cardIndex)); b.addEventListener('click',()=>showCard(i)); dots.appendChild(b); });
-  }
-  function showCard(i){
-    if(changing) return; changing=true; const img=$('featureImage'); img.classList.add('fading');
-    setTimeout(()=>{ cardIndex=(i+cards.length)%cards.length; img.src=cards[cardIndex].src; img.alt=cards[cardIndex].title+'のカード見本'; $('galleryCaption').textContent=cards[cardIndex].title+' · 作品見本'; [...$('cardDots').children].forEach((d,idx)=>d.setAttribute('aria-current', String(idx===cardIndex))); img.classList.remove('fading'); changing=false; },180);
-    restartSlider();
-  }
-  function startSlider(){ stopSlider(); if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; timer=setInterval(()=>showCard(cardIndex+1), 6200); }
-  function stopSlider(){ if(timer) clearInterval(timer); timer=null; }
-  function restartSlider(){ if(page===0) startSlider(); }
-
-  function updateReflect(){
-    $('effortCount').textContent=`${chars($('effort').value)} / 520`; $('joyCount').textContent=`${chars($('joy').value)} / 350`; $('postCount').textContent=`${chars($('postText').value)} / 280`;
-    const score=[chars($('effort').value)>0, chars($('effort').value)>=40, chars($('effort').value)>=90, chars($('joy').value)>0, chars($('joy').value)>=28].filter(Boolean).length;
-    [...$('littleStars').children].forEach((s,idx)=>s.classList.toggle('lit', idx<score));
+  function save() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(
+        Object.fromEntries(fields.map(([id]) => [id, $(id).value]))
+      ));
+    } catch {
+      // Input remains available for this session.
+    }
   }
 
-  function buildPrompt(){
-    const d=getText();
-    const ref = `今年頑張ったこと：${d.effort}\n楽しかったこと・人とのつながり：${d.joy||'未記入'}`;
-    return `【画像生成】次の振り返りから 星座×スイーツ×タロットカードの完成画像を 1枚だけ直接生成してください
+  function restore() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
+      for (const [id] of fields) {
+        const value = saved[id] ?? (id === 'challenge' ? saved.effort : '');
+        if (typeof value === 'string') $(id).value = value;
+      }
+    } catch {
+      // Ignore an unreadable draft.
+    }
+  }
 
-【絶対条件】
-・画像全体が1枚のカードそのもの（机に置いた写真や複数カードの比較図にしない）
-・縦長2:3 安全余白5% 細いアンティークゴールド二重枠 四隅は小さく丸める
-・見本のような紺色の星空・ラベンダー・古金・水彩紙の繊細で静かな大人可愛い雰囲気
-・画面内には本人1人分のカードだけを描く
+  function showEffortError(visible) {
+    $('effortError').hidden = !visible;
+    if (visible) $('connection').setAttribute('aria-invalid', 'true');
+    else $('connection').removeAttribute('aria-invalid');
+  }
 
-【レイアウト：上部は絵が約1/3、文章を主役に】
-カードの全高を100%として割合を厳守する
-・最上部8%：星座記号・短い日本語タイトル・控えめな英語副題
-・続く32%：星座の線 月 小さな花 灯りを背景に スイーツ1種類を大きく描く水彩画
-・続く57%：明るいアイボリーの紙面に3段のメッセージ
-・最下部3%：小さな金色の装飾
-・絵がカードの半分以上を占めない 文章欄を圧迫しない
-・3段はそれぞれ約19%の高さを確保して金の細線で区切る
-・文章欄は左38%に番号つき見出し 右57%に本文 中央を細い縦の金線で区切る
-・左見出しの位置と右本文の開始位置を3段で完全にそろえる
-・本文は各段2〜4行で読み切れる短い日本語にする
+  function setPage(next, focus = true) {
+    if (next >= 2 && !hasReflection()) {
+      if (page !== 1) setPage(1, false);
+      showEffortError(true);
+      $('connection').focus();
+      return;
+    }
+    if (next !== page) cancelGlow();
+    page = next;
+    pages.forEach((section, index) => {
+      section.hidden = index !== page;
+      section.classList.toggle('active', index === page);
+    });
+    progress.forEach((step, index) => {
+      step.classList.toggle('current', page === index + 1);
+      step.classList.toggle('done', page > index + 1);
+      if (page === index + 1) step.setAttribute('aria-current', 'step');
+      else step.removeAttribute('aria-current');
+    });
+    document.body.className = 'page-theme-' + page;
+    if (focus) $(pages[page].getAttribute('aria-labelledby')).focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
 
-【見出し：以下の3つを一字一句変えずに入れる】
+  function showCard(index) {
+    cardIndex = (index + samples.length) % samples.length;
+    const card = samples[cardIndex];
+    const image = $('featureImage');
+    image.src = artwork(card);
+    image.alt = card.title + 'のカード見本';
+    if (!reducedMotion.matches && image.animate) {
+      image.getAnimations().forEach(animation => animation.cancel());
+      image.animate([{ opacity: 0.5 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+    }
+    $('galleryCaption').textContent = card.title + ' · 作品見本';
+    [...$('cardDots').children].forEach((dot, i) => dot.setAttribute('aria-current', String(i === cardIndex)));
+  }
+
+  function setupCards() {
+    samples.forEach((card, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-label', card.title);
+      button.setAttribute('aria-current', String(index === cardIndex));
+      button.addEventListener('click', () => showCard(index));
+      $('cardDots').append(button);
+    });
+  }
+
+  function updateDesign() {
+    const card = samples[0];
+    $('designImage').src = artwork(card);
+    $('designImage').alt = card.title + 'のカード見本';
+    $('secondaryDesignImage').src = artwork(samples[1]);
+  }
+
+  function updateCounts() {
+    const count = getText().filter(([, value]) => value).length;
+    [...$('littleStars').children].forEach((star, index) => star.classList.toggle('lit', index < count));
+  }
+
+  function buildPrompt() {
+    const reflection = getText().map(([label, value]) => label + "： " + (value || "未記入")).join("\n");
+    return `【画像生成】以下の振り返りから 星座×スイーツ×タロットカードの完成画像を1枚生成してください
+
+【カードの仕様】
+・縦長2:3 画像全体が1枚のカード 安全余白5%
+・細いアンティークゴールドの二重枠 四隅は小さく丸める
+・古金とアイボリーを共通にした 繊細な手描き水彩と水彩紙
+・本人の言葉に合う星座モチーフを1つ選ぶ
+・星座とスイーツを1つずつ選ぶ。候補はパフェ カヌレ タルト マカロン プリン モンブランなど。スイーツ本体は横幅の約60〜65%を目安に手前に描く
+・添付見本があれば構図と画風の参考にする
+
+・色と光と背景は振り返りに合わせて選ぶ。菫色の月夜 暖かなアプリコットの花園 群青の星空 深緑と琥珀の森などから変化をつける
+・星座記号の隣に日本語の星座名を書く
+
+【レイアウト】
+・上端から全高40%までがタイトルと絵。最上部8%に星座記号 短い日本語タイトル 控えめな英語副題。続く32%にスイーツと選んだ背景の水彩画
+・全高40%から97%までが明るいアイボリーの文章欄。3段を同じ高さにして古金の細線で区切る
+・各段の左36%に見出し 右64%に本文。各段の見出しと本文の開始位置を揃え 読みやすい文字と余白を確保する
+・残る最下部3%に小さな金色の装飾
+
+【固定見出し】
 ① あなたのタイプ
 ② 今年頑張ったこと
 ③ 来年のアクション
 
 【文章ルール】
-・本文に句読点「、」「。」は一切使用しない
-・本人の振り返りに含まれない性格や成果を創作しない
-・①は本人の言葉から見える魅力を断定せず優しく表す
-・②は実際の頑張りや学び・つながりを具体的にねぎらう
-・③では2027年の小さな挑戦を1つ提案し 2026年12月に始める15〜30分の最初の行動を1つ明示する
-・未来を占いとして断定しない 気持ちに寄り添うあたたかな言葉にする
-
-【視覚表現】
-・20〜30代の働く女性や SHElikesで学ぶ女性に似合う 洗練された水彩のタロットカード
-・紺 くすみラベンダー アイボリー アンティークゴールドを基調にする
-・発光や装飾は控えめで手描きの質感を大切にする
-・星座とスイーツは本人の言葉に合わせてAIが1つずつ選ぶ
-・文字の欠落 誤字 ぼやけ はみ出しを避ける 必ず読みやすい日本語で描画する
+・各本文は25〜42字程度を2〜3行にまとめる。句読点「、」「。」は使わない
+・①は振り返りからうかがえる魅力をやさしく表す。星座から性格や未来を断定しない
+・②は本人が書いた努力や学びを具体的にねぎらう。書かれていない性格や実績は作らない
+・③は2027年の小さな挑戦を1つ提案し 2026年12月に始める15〜30分の行動を1つ添える
+・固定見出しは一字一句そのまま 誤字や文字のはみ出しがないか確認する
 
 【本人の振り返り】
-${ref}
+${reflection}
 
-今すぐ完成した1枚のカード画像を生成してください`;
+記入された項目を使い 未記入の内容は作らず 完成カードを1枚生成してください。`;
   }
 
-  function revealPrompt(){
-    if(!getText().effort){ setPage(1); showToast('まずは振り返りを入力してください'); return; }
-    promptBuilt = buildPrompt();
-    $('promptFlash').classList.add('show');
-    setTimeout(()=>{
-      $('promptFlash').classList.remove('show');
-      $('inlinePrompt').value=promptBuilt;
-      $('promptText').value=promptBuilt;
-      $('promptPanel').hidden=false;
-      $('promptPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
+  function cancelGlow() {
+    clearTimeout(promptTimer);
+    promptTimer = undefined;
+    $('promptFlash').hidden = true;
+    $('buildPrompt').disabled = false;
+    $('buildPrompt').removeAttribute('aria-busy');
+  }
+
+  function invalidatePrompt() {
+    cancelGlow();
+    promptBuilt = '';
+    $('inlinePrompt').value = '';
+    $('promptText').value = '';
+    $('promptPanel').hidden = true;
+    $('buildPrompt').hidden = false;
+    $('buildPrompt').setAttribute('aria-expanded', 'false');
+  }
+
+  function revealPrompt() {
+    if (promptTimer !== undefined) return;
+    const finish = () => {
+      cancelGlow();
+      promptBuilt = buildPrompt();
+      $('inlinePrompt').value = promptBuilt;
+      $('promptText').value = promptBuilt;
+      $('promptPanel').hidden = false;
+      $('buildPrompt').setAttribute('aria-expanded', 'true');
+      $('buildPrompt').hidden = true;
+      $('promptTitle').focus();
       showToast('プロンプトを作成しました');
-    }, 1250);
+    };
+    if (reducedMotion.matches) {
+      finish();
+      return;
+    }
+    $('buildPrompt').disabled = true;
+    $('buildPrompt').setAttribute('aria-busy', 'true');
+    $('promptFlash').hidden = false;
+    promptTimer = setTimeout(finish, 840);
   }
 
-  async function copy(text){
-    try{
-      if(navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
-      else { const t=document.createElement('textarea'); t.value=text; t.style.position='fixed'; t.style.left='-9999px'; document.body.appendChild(t); t.select(); const ok=document.execCommand('copy'); t.remove(); if(!ok) throw new Error('copy'); }
+  function showPromptModal() {
+    if (!$('promptModal').open) $('promptModal').showModal();
+  }
+
+  async function copyFrom(field) {
+    const text = field.value.trim();
+    if (!text) return false;
+    const active = document.activeElement;
+    const currentPage = page;
+    try {
+      await navigator.clipboard.writeText(text);
       return true;
-    }catch(_e){ $('promptText').value=text; $('promptModal').showModal(); return false; }
+    } catch {
+      if (currentPage !== page) return false;
+      field.hidden = false;
+      field.focus({ preventScroll: true });
+      field.select();
+      try {
+        if (document.execCommand('copy')) {
+          active?.focus({ preventScroll: true });
+          return true;
+        }
+      } catch {
+        // The selected text remains available for manual copy.
+      }
+      return false;
+    }
   }
 
-  function openChat(){
-    promptBuilt=buildPrompt();
-    const url='https://chatgpt.com/?q='+encodeURIComponent(promptBuilt);
-    if(url.length>12000){ $('promptText').value=promptBuilt; $('promptModal').showModal(); showToast('文章が長いため コピーして貼り付けてください'); return; }
-    window.open(url,'_blank','noopener,noreferrer');
-    showToast('ChatGPTを開きました 見本カードや構図見本を添付すると近づけやすいです');
+  async function copyPrompt(field, opensChat) {
+    if (await copyFrom(field)) {
+      showToast('プロンプトをコピーしました');
+      return;
+    }
+    if (opensChat) showToast('コピーできませんでした。戻って文章を選択してコピーできます');
+    else showToast('選択した文章を長押ししてコピーしてください');
   }
 
-  function buildPost(mark){
-    const d=getText();
-    const text=`今年のわたしに おつかれさま ✧
-
-今年頑張ったこと：${clip(d.effort,70)}${d.joy?`
-楽しかったこと：${clip(d.joy,48)}`:''}
-
-来年も 自分のペースで一歩ずつ進みたい
-
-#夜活コミュニティ #SHElikes`;
-    $('postText').value=text; postTouched=!!mark; updateReflect(); save();
+  function openClear(all) {
+    clearEverything = all;
+    $('clearTitle').textContent = all ? '最初からやり直しますか？' : '入力をクリアしますか？';
+    $('clearDescription').textContent = all
+      ? '振り返りとプロンプトが消去されます。'
+      : '振り返りの4項目とプロンプトが消去されます。';
+    $('clearModal').returnValue = '';
+    $('clearModal').showModal();
   }
 
-  function openX(){ const text=$('postText').value.trim(); if(!text){ showToast('投稿文を入力してください'); return; } window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank','noopener,noreferrer'); showToast(photo?'Xで画像を添付してください':'Xの投稿画面を開きました'); }
-  function updateShare(){ const can=Boolean(photo && navigator.share && navigator.canShare && navigator.canShare({files:[photo]})); $('nativeShare').hidden=!can; $('shareHint').textContent=can?'この端末では 画像と文章を一緒に共有できます 共有先でXを選択してください':'Xで投稿文を開いたあと 画像を添付して投稿してください'; }
-  async function nativeShare(){ if(!(photo && navigator.share && navigator.canShare && navigator.canShare({files:[photo]}))){ showToast('この端末では画像つき共有に対応していません'); return;} try{ await navigator.share({files:[photo], text:$('postText').value.trim()}); }catch(e){ if(e.name!=='AbortError') showToast('共有できませんでした'); }}
-  function onImage(file){ if(!file) return; if(!/^image\//.test(file.type)){ showToast('画像ファイルを選んでください'); return; } if(file.size>16*1024*1024){ showToast('16MB以下の画像を選んでください'); return; } if(photoURL) URL.revokeObjectURL(photoURL); photo=file; photoURL=URL.createObjectURL(file); $('uploadedImage').src=photoURL; $('uploadedBox').hidden=false; $('uploadPlaceholder').hidden=true; $('imageStatus').textContent=file.name+' を読み込みました'; updateShare(); }
-  function downloadMemo(){ const d=getText(); const text=`星の余韻
-
-【今年頑張ったこと】
-${d.effort}
-
-【楽しかったこと・人とのつながり】
-${d.joy}
-
-【生成プロンプト】
-${promptBuilt||buildPrompt()}
-
-【投稿文】
-${$('postText').value}
-`; const blob=new Blob(['﻿'+text],{type:'text/plain;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='星の余韻_メモ.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),800); }
-  function clearReflection(){
-    const hasContent=Boolean($('effort').value.trim()||$('joy').value.trim());
-    if(!hasContent){ showToast('入力欄はすでに空です'); return; }
-    if(!confirm('入力した2項目をクリアしますか？\n作成済みのプロンプトと投稿文案も消去されます')) return;
-    $('effort').value='';
-    $('joy').value='';
-    $('postText').value='';
-    $('inlinePrompt').value='';
-    $('promptText').value='';
-    $('promptPanel').hidden=true;
-    promptBuilt='';
-    postTouched=false;
-    updateReflect();
+  function clearDraft() {
+    for (const [id] of fields) $(id).value = '';
+    showEffortError(false);
+    invalidatePrompt();
+    if (clearEverything) {
+      updateDesign();
+      showCard(0);
+      setPage(0);
+    }
+    updateCounts();
     save();
-    $('effort').focus();
-    showToast('入力内容をクリアしました');
-  }
-  function resetAll(){ if(!confirm('入力内容を最初から消去しますか')) return; ['effort','joy','postText','inlinePrompt','promptText'].forEach(id=>$(id).value=''); postTouched=false; promptBuilt=''; $('promptPanel').hidden=true; if(photoURL) URL.revokeObjectURL(photoURL); photo=null; photoURL=null; $('uploadedBox').hidden=true; $('uploadPlaceholder').hidden=false; $('imageStatus').textContent='ChatGPTで保存した画像を選択してください'; $('imageFile').value=''; try{localStorage.removeItem(KEY)}catch(_e){} updateReflect(); updateShare(); setPage(0); showToast('最初の状態に戻しました'); }
-
-  function bind(){
-    $('goHome').addEventListener('click',()=>setPage(0)); $('start').addEventListener('click',()=>setPage(1)); $('clearAll').addEventListener('click',resetAll);
-    document.querySelectorAll('[data-goto]').forEach(btn=>btn.addEventListener('click',()=>setPage(btn.dataset.goto)));
-    ['effort','joy'].forEach(id=>$(id).addEventListener('input',()=>{updateReflect(); if(!postTouched) buildPost(false); save();}));
-    document.querySelectorAll('.suggestions button').forEach(btn=>btn.addEventListener('click',()=>{ const field=$(btn.dataset.field), val=btn.dataset.value; const next=field.value.trim()?field.value.trim()+'\n'+val:val; if(chars(next)>Number(field.maxLength)){ showToast('入力の上限に達します'); return;} field.value=next; field.dispatchEvent(new Event('input',{bubbles:true})); field.focus(); }));
-    $('clearReflection').addEventListener('click',clearReflection);
-    $('goMake').addEventListener('click',()=>setPage(2)); $('buildPrompt').addEventListener('click',revealPrompt); $('openChatGPT').addEventListener('click',openChat);
-    $('copyPrompt').addEventListener('click',async()=>{ const txt=promptBuilt||buildPrompt(); if(await copy(txt)) showToast('プロンプトをコピーしました'); }); $('viewPrompt').addEventListener('click',()=>{ $('promptText').value=promptBuilt||buildPrompt(); $('promptModal').showModal(); }); $('goShare').addEventListener('click',()=>setPage(3));
-    $('rebuildPost').addEventListener('click',()=>{ buildPost(true); showToast('投稿文を作り直しました');}); $('postText').addEventListener('input',()=>{ postTouched=true; updateReflect(); save(); }); $('copyPost').addEventListener('click',async()=>{ const txt=$('postText').value.trim(); if(!txt){showToast('投稿文を入力してください'); return;} if(await copy(txt)) showToast('投稿文をコピーしました'); }); $('postToX').addEventListener('click',openX); $('nativeShare').addEventListener('click',nativeShare);
-    $('imageFile').addEventListener('change',e=>onImage(e.target.files?.[0])); $('downloadMemo').addEventListener('click',downloadMemo);
-    $('openPrivacy').addEventListener('click',()=>$('privacyModal').showModal()); $('closePrivacy').addEventListener('click',()=>$('privacyModal').close()); $('closePrompt').addEventListener('click',()=>$('promptModal').close()); $('modalCopy').addEventListener('click',async()=>{ if(await copy($('promptText').value)){$('promptModal').close(); showToast('文章をコピーしました');}}); $('modalChat').addEventListener('click',()=>window.open('https://chatgpt.com/','_blank','noopener,noreferrer'));
-    ['promptModal','privacyModal'].forEach(id=>$(id).addEventListener('click',e=>{ if(e.target===$(id)) $(id).close(); }));
-    $('prevCard').addEventListener('click',()=>showCard(cardIndex-1)); $('nextCard').addEventListener('click',()=>showCard(cardIndex+1)); document.addEventListener('visibilitychange',()=>document.hidden?stopSlider():page===0&&startSlider()); $('galleryRegion').addEventListener('mouseenter',stopSlider); $('galleryRegion').addEventListener('mouseleave',()=>page===0&&startSlider());
+    if (!clearEverything) $('connection').focus();
+    showToast(clearEverything ? '最初の状態に戻しました' : '入力内容をクリアしました');
   }
 
-  restore(); bind(); renderDots(); updateReflect(); updateShare(); if(!$('postText').value) buildPost(false); setPage(0);
+  function reflectionChanged() {
+    if (hasReflection()) showEffortError(false);
+    invalidatePrompt();
+    updateCounts();
+    save();
+  }
+
+  function bind() {
+    $('goHome').addEventListener('click', () => setPage(0));
+    $('start').addEventListener('click', () => setPage(1));
+    $('goMake').addEventListener('click', () => setPage(2));
+    document.querySelectorAll('[data-goto]').forEach(button => {
+      button.addEventListener('click', () => setPage(Number(button.dataset.goto)));
+    });
+
+    for (const [id] of fields) $(id).addEventListener('input', reflectionChanged);
+    $('clearReflection').addEventListener('click', () => openClear(false));
+    $('clearAll').addEventListener('click', () => openClear(true));
+    $('clearModal').addEventListener('close', () => {
+      if ($('clearModal').returnValue === 'confirm') clearDraft();
+    });
+
+    $('prevCard').addEventListener('click', () => showCard(cardIndex - 1));
+    $('nextCard').addEventListener('click', () => showCard(cardIndex + 1));
+
+    $('buildPrompt').addEventListener('click', revealPrompt);
+    $('copyPrompt').addEventListener('click', () => copyPrompt($('inlinePrompt')));
+    $('viewPrompt').addEventListener('click', showPromptModal);
+    $('modalCopy').addEventListener('click', () => copyPrompt($('promptText')));
+    $('closePrompt').addEventListener('click', () => $('promptModal').close());
+    $('openPrivacy').addEventListener('click', () => $('privacyModal').showModal());
+    $('closePrivacy').addEventListener('click', () => $('privacyModal').close());
+
+  }
+
+  setupCards();
+  restore();
+  bind();
+  updateDesign();
+  updateCounts();
+  setPage(0, false);
 })();
