@@ -6,9 +6,14 @@
 <meta name="theme-color" content="#10192f">
 <meta name="description" content="一年の頑張りを 星とスイーツの大人なタロットカードに">
 <title>星の余韻｜一年の私に 星からの贈りもの</title>
+<link rel="icon" href="assets/favicon.svg?v=moon-star-1" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.ico?v=moon-star-1" sizes="32x32">
+<link rel="icon" href="assets/web-icon.png?v=moon-star-1" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+<meta name="apple-mobile-web-app-title" content="星の余韻">
 <link rel="preload" href="assets/sample-canele.webp" as="image">
-<link rel="stylesheet" href="styles.css?v=zodiac-final">
-<script src="app.js?v=copy-before-open-20261118" defer></script>
+<link rel="stylesheet" href="styles.css?v=clipboard-icon-20261118">
+<script src="app.js?v=clipboard-icon-20261118" defer></script>
 </head>
 <body class="page-theme-0">
 <div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -17,7 +22,7 @@
 <div class="prompt-flash" id="promptFlash" aria-hidden="true" hidden><div class="prompt-flash-inner"><div class="flash-core"></div><p>星のことばを集めています</p></div></div>
 <div class="site">
   <header class="topbar">
-    <button type="button" class="brand" id="goHome" aria-label="ホームに戻る"><span class="brand-orbit">✧</span><span>星の余韻<small>HOSHI NO YOIN</small></span></button>
+    <button type="button" class="brand" id="goHome" aria-label="ホームに戻る"><img class="brand-orbit" src="assets/favicon.svg" width="40" height="40" alt=""><span>星の余韻<small>HOSHI NO YOIN</small></span></button>
     <div class="top-actions"><span class="top-edition">2026 · NIGHT WORKSHOP</span><button type="button" id="clearAll" class="quiet-button">最初から</button></div>
   </header>
   <div class="progress" aria-label="制作のステップ">
@@ -75,8 +80,8 @@
           <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
           <div class="prompt-panel" id="promptPanel" hidden>
             <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">準備ができました</h3></div>
-            <p class="prompt-help">プロンプトをコピーしてから、別タブでChatGPTを開きます。開いた画面に貼り付けて送信してね。</p>
-            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">内容を確認</button></div>
+            <p class="prompt-help">コピーしてChatGPTを開いたら、入力欄で Ctrl+V / ⌘V。スマホは長押しして貼り付けてね。</p>
+            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">貼り付けできないとき</button></div>
             <p id="copyStatus" role="status" aria-live="polite"></p>
             <div class="finish-guide"><strong>カードができたら</strong><ol><li>ChatGPTで生成した画像を保存してね。</li><li>ワークシートに戻って、保存した画像を貼り付けよう。</li></ol></div>
             <textarea hidden id="inlinePrompt" aria-labelledby="promptTitle" rows="7" readonly spellcheck="false"></textarea>
@@ -91,8 +96,8 @@
   <footer class="footer"><span>✧ A LITTLE STAR FOR YOU ✧</span><button type="button" id="openPrivacy" class="text-button">プライバシーについて</button></footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>この文章をChatGPTに貼り付けてもカードを生成できます</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly spellcheck="false"></textarea><div class="modal-actions"><p id="modalCopyStatus" role="status"></p><button id="modalCopy" class="button primary" type="button">文章をコピー</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
-<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。「入力をクリア」で消去できます。「ChatGPTを開く」を押すと、プロンプトのコピーが完了してからChatGPTを開きます。開いた画面に貼り付けて送信してください。自動コピーできない場合は、この画面に文章を表示してご案内します。</p></dialog>
+<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>下の文章をコピーして、ChatGPTの入力欄に貼り付けてね。</p><p class="manual-copy-help">貼り付けできないときは「全文を選択」→ Ctrl+C / ⌘C。スマホは選択した文章を長押しして「コピー」を選んでね。テキストとして保存することもできます。</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly spellcheck="false"></textarea><div class="modal-actions"><p id="modalCopyStatus" role="status"></p><button id="modalCopy" class="button primary" type="button">文章をコピー</button><button id="modalSelect" class="button secondary" type="button">全文を選択</button><button id="downloadPrompt" class="button secondary" type="button">テキストを保存</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
+<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。「入力をクリア」で消去できます。「ChatGPTを開く」を押すと、プロンプトのコピーが完了してからChatGPTを開きます。開いた画面に貼り付けて送信してください。貼り付けできない場合は「貼り付けできないとき」から文章を表示し、手動コピーやテキスト保存ができます。</p></dialog>
 <dialog class="modal small-modal" id="clearModal" aria-labelledby="clearTitle" aria-describedby="clearDescription">
   <form method="dialog">
     <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3></div>

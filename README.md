@@ -11,16 +11,23 @@ ZIPを展開して index.html を開くと使えます。
 
 入力はこのブラウザに保存され、「入力をクリア」で消去できます。
 自動コピーできない環境では文章が選択表示されるので、長押し、または Ctrl+C / ⌘C でコピーしてください。「プロンプトをコピー」だけを使うこともできます。
+貼り付けできないときは「貼り付けできないとき」を開き、「全文を選択」から手動でコピーしてください。「テキストを保存」からプロンプトを保存することもできます。
 ChatGPT側でログインが必要な場合があります。
 
 ## 更新するファイル
 
 index.html、app.js、styles.css をまとめて上書きしてください。
-assets フォルダは次の4枚だけを含むフォルダに置き換えてください。以前の見本画像と layout_reference.png は使いません。
+assets フォルダには次の4枚の見本と4つのアイコンを配置してください。以前の見本画像と layout_reference.png は使いません。
 
 - sample-canele.webp
 - sample-tart.webp
 - sample-macaron.webp
 - sample-montblanc.webp
+- favicon.svg
+- favicon.ico
+- apple-touch-icon.png
+- web-icon.png
+
+前の版からの更新では、コード3ファイルとアイコン4ファイルを上書き・追加してください。見本画像4枚の変更はありません。
 
 GitHub Pagesでは .nojekyll も公開元フォルダに配置します。

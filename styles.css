@@ -412,3 +412,5 @@ textarea[aria-invalid="true"] { border-color: #ae4960; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+.manual-copy-help { padding: 12px 14px; border: 1px solid #d8bf9c; border-radius: 10px; background: #f5eadb; }

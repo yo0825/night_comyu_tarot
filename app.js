@@ -219,6 +219,19 @@ ${reflection}
     if (!$('promptModal').open) $('promptModal').showModal();
   }
 
+  function downloadPrompt() {
+    const text = $('promptText').value;
+    if (!text.trim()) return;
+    const url = URL.createObjectURL(new Blob(['\uFEFF', text], { type: 'text/plain;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = '星の余韻_画像生成プロンプト.txt';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+
   function selectPrompt(field) {
     field.hidden = false;
     field.focus({ preventScroll: true });
@@ -235,30 +248,40 @@ ${reflection}
 
     const wasHidden = field.hidden;
     const sourcePage = page;
-    let copied = false;
+    let apiCopy = Promise.resolve(false);
     if (navigator.clipboard?.writeText) {
       try {
-        await navigator.clipboard.writeText(text);
-        copied = true;
+        apiCopy = Promise.resolve(navigator.clipboard.writeText(text)).then(() => true, () => false);
       } catch {
-        // A visible selection provides a fallback for restricted contexts.
+        // Continue with the synchronous copy while the click is still active.
       }
     }
 
-    if (field.value !== text || sourcePage !== page) return false;
-    if (!copied) {
-      selectPrompt(field);
-      try {
-        copied = document.execCommand('copy');
-      } catch {
-        // Leave the text selected for manual copy.
+    // This fallback must run before the first await. Some browsers require
+    // the original click gesture for copy, even if an API attempt is rejected.
+    selectPrompt(field);
+    let selectionCopied = false;
+    const writePlainText = event => {
+      if (event.clipboardData) {
+        event.clipboardData.setData('text/plain', text);
+        event.preventDefault();
       }
+    };
+    document.addEventListener('copy', writePlainText);
+    try {
+      selectionCopied = document.execCommand('copy');
+    } catch {
+      // The selected text stays available for manual copy.
+    } finally {
+      document.removeEventListener('copy', writePlainText);
     }
 
+    const apiCopied = await apiCopy;
+    const copied = apiCopied || selectionCopied;
     if (field.value !== text || sourcePage !== page) return false;
     const message = copied
-      ? 'コピーしました。ChatGPTに貼り付けて送信してください。'
-      : '自動コピーできませんでした。表示された文章を長押し、または Ctrl+C / ⌘C でコピーしてください。';
+      ? 'コピーしました。ChatGPTの入力欄で Ctrl+V / ⌘V、スマホは長押し→貼り付けをしてください。'
+      : '自動コピーできませんでした。選択された文章を Ctrl+C / ⌘C、スマホは長押し→コピーしてください。';
     if (copied) field.hidden = wasHidden;
     else selectPrompt(field);
     $('copyStatus').textContent = message;
@@ -363,6 +386,11 @@ ${reflection}
     $('copyPrompt').addEventListener('click', () => copyPrompt($('inlinePrompt')));
     $('viewPrompt').addEventListener('click', showPromptModal);
     $('modalCopy').addEventListener('click', () => copyPrompt($('promptText')));
+    $('modalSelect').addEventListener('click', () => {
+      selectPrompt($('promptText'));
+      $('modalCopyStatus').textContent = '全文を選択しました。Ctrl+C / ⌘C、スマホは長押し→コピーしてください。';
+    });
+    $('downloadPrompt').addEventListener('click', downloadPrompt);
     $('closePrompt').addEventListener('click', () => $('promptModal').close());
     $('openPrivacy').addEventListener('click', () => $('privacyModal').showModal());
     $('closePrivacy').addEventListener('click', () => $('privacyModal').close());
