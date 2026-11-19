@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const storageKey = 'hoshi-no-yoin-requested-v11';
+  const legacyDraftKey = 'hoshi-no-yoin-requested-v11';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const pages = [...document.querySelectorAll('[data-page]')];
   const progress = [...document.querySelectorAll('[data-progress]')];
@@ -13,7 +13,7 @@
     { key: 'montblanc', title: '森のモンブラン' }
   ];
   const artwork = card => 'assets/sample-' + card.key + '.webp';
-  const fields = [['challenge', '挑戦'], ['growth', '成長'], ['connection', 'つながり'], ['joy', '喜び']];
+  const fields = [['connection', 'つながり'], ['joy', '喜び'], ['challenge', '挑戦'], ['growth', '成長']];
   const getText = () => fields.map(([id, label]) => [label, $(id).value.trim()]);
   const hasReflection = () => getText().some(([, value]) => value);
 
@@ -32,39 +32,25 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
   }
 
-  function save() {
+  function clearSavedDraft() {
     try {
-      localStorage.setItem(storageKey, JSON.stringify(
-        Object.fromEntries(fields.map(([id]) => [id, $(id).value]))
-      ));
+      localStorage.removeItem(legacyDraftKey);
     } catch {
-      // Input remains available for this session.
-    }
-  }
-
-  function restore() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {};
-      for (const [id] of fields) {
-        const value = saved[id] ?? (id === 'challenge' ? saved.effort : '');
-        if (typeof value === 'string') $(id).value = value;
-      }
-    } catch {
-      // Ignore an unreadable draft.
+      // The current form is cleared even if browser storage is unavailable.
     }
   }
 
   function showEffortError(visible) {
     $('effortError').hidden = !visible;
-    if (visible) $('challenge').setAttribute('aria-invalid', 'true');
-    else $('challenge').removeAttribute('aria-invalid');
+    if (visible) $('connection').setAttribute('aria-invalid', 'true');
+    else $('connection').removeAttribute('aria-invalid');
   }
 
   function setPage(next, focus = true) {
     if (next >= 2 && !hasReflection()) {
       if (page !== 1) setPage(1, false);
       showEffortError(true);
-      $('challenge').focus();
+      $('connection').focus();
       return;
     }
     if (next !== page) cancelGlow();
@@ -324,8 +310,8 @@ ${reflection}
       setPage(0);
     }
     updateCounts();
-    save();
-    if (!clearEverything) $('challenge').focus();
+    clearSavedDraft();
+    if (!clearEverything) $('connection').focus();
     showToast(clearEverything ? '最初の状態に戻しました' : '入力内容をクリアしました');
   }
 
@@ -333,7 +319,6 @@ ${reflection}
     if (hasReflection()) showEffortError(false);
     invalidatePrompt();
     updateCounts();
-    save();
   }
 
   function bind() {
@@ -375,7 +360,7 @@ ${reflection}
   }
 
   setupCards();
-  restore();
+  for (const [id] of fields) $(id).value = '';
   bind();
   updateDesign();
   updateCounts();
