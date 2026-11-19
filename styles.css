@@ -414,3 +414,13 @@ textarea[aria-invalid="true"] { border-color: #ae4960; }
 }
 
 .manual-copy-help { padding: 12px 14px; border: 1px solid #d8bf9c; border-radius: 10px; background: #f5eadb; }
+
+.field-help { margin: 7px 0 10px; color: #736575; font-size: 12px; line-height: 1.8; }
+.modal-head { position: sticky; top: -1px; z-index: 1; padding-bottom: 8px; background: #fdf5ec; }
+.modal-head .modal-close { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; border: 1px solid #cdb999; border-radius: 50%; color: #5b4951; background: #f5eadb; line-height: 1; }
+.modal-head .modal-close:hover { background: #ecdbc5; }
+.modal-head .modal-close:focus-visible { outline: 3px solid #806e9d; outline-offset: 3px; }
+.privacy-item { margin-top: 16px; }
+.privacy-item h4 { margin: 0; font-size: 14px; color: #5b4951; }
+.privacy-item p { margin: 6px 0 0; }
+.privacy-note { padding: 12px 14px; border-radius: 10px; background: #f5eadb; }

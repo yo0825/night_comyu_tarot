@@ -12,8 +12,8 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
 <meta name="apple-mobile-web-app-title" content="星の余韻">
 <link rel="preload" href="assets/sample-canele.webp" as="image">
-<link rel="stylesheet" href="styles.css?v=clipboard-icon-20261118">
-<script src="app.js?v=clipboard-icon-20261118" defer></script>
+<link rel="stylesheet" href="styles.css?v=worksheet-privacy-20261119">
+<script src="app.js?v=worksheet-privacy-20261119" defer></script>
 </head>
 <body class="page-theme-0">
 <div class="ambient-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -49,12 +49,12 @@
       <div class="reflection-layout">
         <div class="left-panel">
           <h2 id="reflectTitle" tabindex="-1">ワークシートを<br><em>ふりかえる</em></h2>
-          <p class="section-description">ワークシートに書いた内容をコピーして、同じ名前の欄に貼り付けてね。</p>
+          <p class="section-description">ワークシートの内容を、挑戦・成長・つながり・喜びの順にコピーして貼り付けてね。学びのことも、仕事や暮らしのことも書いて大丈夫。思い浮かぶ項目だけで進められます。</p>
           <div class="notebook worksheet-fields" role="group" aria-label="ワークシートの振り返り">
-            <div><label for="connection">① つながり</label><textarea id="connection" aria-describedby="effortError" rows="3" placeholder="例：勉強会で知り合った仲間と、作ったものを見せ合った"></textarea></div>
-            <div><label for="joy">② 喜び</label><textarea id="joy" rows="3" placeholder="例：週末に好きなカフェでゆっくり本を読んだ"></textarea></div>
-            <div><label for="challenge">③ 挑戦</label><textarea id="challenge" rows="3" placeholder="例：初めてイベントのバナーを作った"></textarea></div>
-            <div><label for="growth">④ 成長</label><textarea id="growth" rows="3" placeholder="例：作ったものの工夫を、自分の言葉で伝えられるようになった"></textarea></div>
+            <div><label for="challenge">① 挑戦</label><p id="challengeHelp" class="field-help">新しくやってみたことや、勇気を出して取り組んだこと。</p><textarea id="challenge" aria-describedby="challengeHelp effortError" rows="3" placeholder="例：初めてイベントのバナーを作った"></textarea></div>
+            <div><label for="growth">② 成長</label><p id="growthHelp" class="field-help">前よりできるようになったことや、学んで身についたこと。</p><textarea id="growth" aria-describedby="growthHelp" rows="3" placeholder="例：作ったものの工夫を、自分の言葉で伝えられるようになった"></textarea></div>
+            <div><label for="connection">③ つながり</label><p id="connectionHelp" class="field-help">思いがけない出会いや、人との関わりで印象に残ったこと。</p><textarea id="connection" aria-describedby="connectionHelp" rows="3" placeholder="例：勉強会で知り合った仲間と、作ったものを見せ合った"></textarea></div>
+            <div><label for="joy">④ 喜び</label><p id="joyHelp" class="field-help">楽しかった時間や、うれしい発見・心が動いたこと。</p><textarea id="joy" aria-describedby="joyHelp" rows="3" placeholder="例：週末に好きなカフェでゆっくり本を読んだ"></textarea></div>
             <p id="effortError" class="field-error" role="alert" hidden>どれか1つの欄に内容を貼り付けてね。</p>
           </div>
           <div id="littleStars" class="little-stars" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
@@ -80,8 +80,8 @@
           <button type="button" id="buildPrompt" class="button primary wide" aria-controls="promptPanel" aria-expanded="false">プロンプトを作成する <span>✦</span></button>
           <div class="prompt-panel" id="promptPanel" hidden>
             <div class="prompt-head"><h3 id="promptTitle" tabindex="-1">準備ができました</h3></div>
-            <p class="prompt-help">コピーしてChatGPTを開いたら、入力欄で Ctrl+V / ⌘V。スマホは長押しして貼り付けてね。</p>
-            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="copyPrompt" class="button secondary">プロンプトをコピー</button><button type="button" id="viewPrompt" class="text-button">貼り付けできないとき</button></div>
+            <p class="prompt-help">ボタンを押すと、プロンプトを渡してChatGPTを開きます。貼り付け操作は不要です。</p>
+            <div class="prompt-actions"><a id="openChatGPT" class="button primary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a><button type="button" id="viewPrompt" class="text-button">プロンプトを確認</button></div>
             <p id="copyStatus" role="status" aria-live="polite"></p>
             <div class="finish-guide"><strong>カードができたら</strong><ol><li>ChatGPTで生成した画像を保存してね。</li><li>ワークシートに戻って、保存した画像を貼り付けよう。</li></ol></div>
             <textarea hidden id="inlinePrompt" aria-labelledby="promptTitle" rows="7" readonly spellcheck="false"></textarea>
@@ -96,11 +96,17 @@
   <footer class="footer"><span>✧ A LITTLE STAR FOR YOU ✧</span><button type="button" id="openPrivacy" class="text-button">プライバシーについて</button></footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" type="button" aria-label="閉じる">×</button></div><p>下の文章をコピーして、ChatGPTの入力欄に貼り付けてね。</p><p class="manual-copy-help">貼り付けできないときは「全文を選択」→ Ctrl+C / ⌘C。スマホは選択した文章を長押しして「コピー」を選んでね。テキストとして保存することもできます。</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly spellcheck="false"></textarea><div class="modal-actions"><p id="modalCopyStatus" role="status"></p><button id="modalCopy" class="button primary" type="button">文章をコピー</button><button id="modalSelect" class="button secondary" type="button">全文を選択</button><button id="downloadPrompt" class="button secondary" type="button">テキストを保存</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
-<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle"><div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" type="button" aria-label="閉じる">×</button></div><p>振り返りはこのブラウザに保存されます。「入力をクリア」で消去できます。「ChatGPTを開く」を押すと、プロンプトのコピーが完了してからChatGPTを開きます。開いた画面に貼り付けて送信してください。貼り付けできない場合は「貼り付けできないとき」から文章を表示し、手動コピーやテキスト保存ができます。</p></dialog>
+<dialog class="modal" id="promptModal" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle">画像生成プロンプト</h3><button id="closePrompt" class="modal-close" type="button" data-close-dialog="promptModal" aria-label="プロンプトを閉じる"><span aria-hidden="true">×</span></button></div><p>下の文章をコピーして、ChatGPTの入力欄に貼り付けてね。</p><p class="manual-copy-help">貼り付けできないときは「全文を選択」→ Ctrl+C / ⌘C。スマホは選択した文章を長押しして「コピー」を選んでね。テキストとして保存することもできます。</p><textarea id="promptText" aria-labelledby="modalTitle" rows="12" readonly spellcheck="false"></textarea><div class="modal-actions"><p id="modalCopyStatus" role="status"></p><button id="modalCopy" class="button primary" type="button">文章をコピー</button><button id="modalSelect" class="button secondary" type="button">全文を選択</button><button id="downloadPrompt" class="button secondary" type="button">テキストを保存</button><a id="modalChat" class="button secondary" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPTを開く <span class="external-arrow" aria-hidden="true"></span></a></div></dialog>
+<dialog class="modal small-modal" id="privacyModal" aria-labelledby="privacyTitle">
+  <div class="modal-head"><h3 id="privacyTitle">プライバシーについて</h3><button id="closePrivacy" class="modal-close" type="button" data-close-dialog="privacyModal" aria-label="プライバシーの説明を閉じる"><span aria-hidden="true">×</span></button></div>
+  <section class="privacy-item"><h4>入力内容の保存</h4><p>振り返りは、この端末のブラウザ内に自動保存されます。「入力をクリア」または「最初から」で消去できます。</p></section>
+  <section class="privacy-item"><h4>ChatGPTへの受け渡し</h4><p>「ChatGPTを開く」を押すと、振り返りを含むプロンプトをURLに入れてChatGPTへ渡します。ChatGPTで送信される場合があり、URLはブラウザの履歴に残る場合があります。</p></section>
+  <section class="privacy-item"><h4>消去できる範囲</h4><p>このサイトの入力を消しても、ChatGPTの会話、ブラウザの履歴、保存したテキストは消えません。必要に応じて、それぞれの画面で削除してください。</p></section>
+  <p class="privacy-note">氏名・連絡先など、個人を特定できる情報は避け、出来事を簡潔に書いてください。</p>
+</dialog>
 <dialog class="modal small-modal" id="clearModal" aria-labelledby="clearTitle" aria-describedby="clearDescription">
   <form method="dialog">
-    <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3></div>
+    <div class="modal-head"><h3 id="clearTitle">入力をクリアしますか？</h3><button id="closeClear" class="modal-close" type="button" data-close-dialog="clearModal" aria-label="確認を閉じる"><span aria-hidden="true">×</span></button></div>
     <p id="clearDescription"></p>
     <div class="modal-actions"><button type="submit" value="cancel" class="button secondary" autofocus>キャンセル</button><button value="confirm" class="button primary" id="confirmClear" type="submit">クリアする</button></div>
   </form>
